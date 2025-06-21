@@ -1,0 +1,199 @@
+import React from "react";
+import { SecondaryBtn, SecondaryLink } from "../Btns";
+import { Line } from "../Line";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { NotFound } from "../NotFound";
+import { useQuery } from "react-query";
+import { useLang } from "../../context/LangContext";
+import axios from "axios";
+import ProjectSkeleton from "../Skeletons/ProjectSkeleton";
+
+const serverPath = import.meta.env.VITE_APP_API_BASE;
+
+export default function FetchProject({ setProjectShowDates, user, projectID }) {
+  const { lang } = useLang();
+
+  const {
+    error,
+    isLoading,
+    isRefetching,
+    data: projectData,
+  } = useQuery(
+    ["fetchProject", projectID],
+    () =>
+      axios.get(`${serverPath}project/${projectID}`).then((res) => res.data),
+    {
+      retry: false,
+      refetchOnWindowFocus: false,
+    }
+  );
+
+  if (isLoading || isRefetching) {
+    return <ProjectSkeleton />;
+  }
+
+  if (error) {
+    return null;
+  }
+
+  const {
+    location,
+    type,
+    date,
+    area,
+    height,
+    duration,
+    img,
+    subDate,
+    owner,
+    name,
+  } = projectData;
+
+  const projectsInfoText = [
+    {
+      name: lang === "ar" ? "الموقع:" : `location:`,
+      val: location,
+    },
+    {
+      name: lang === "ar" ? "نوع المشروع:" : `type:`,
+      val: type,
+    },
+    {
+      name: lang === "ar" ? "التاريخ:" : `date:`,
+      val: date && new Date(date).toISOString().split("T")[0],
+    },
+    {
+      name: lang === "ar" ? "المساحة:" : `  area:`,
+      val: area,
+    },
+    {
+      name: lang === "ar" ? "الارتفاع:" : ` height:`,
+      val: height,
+    },
+    {
+      name: lang === "ar" ? "المدة:" : `duration:`,
+      val: duration,
+    },
+  ];
+
+  const isOwner = user.userName === owner.userName;
+
+  return (
+    <div
+      id="project-info"
+      className={`grid sm:w-10/12 lg:w-full max-w-[350px] place-items-center rounded-3xl bg-lightGreen relative sm:mb-24 mt-5 grid-flow-row group`}
+    >
+      {/* project owner shape  */}
+      {!isOwner && (
+        <div
+          className="absolute -top-[40px] text-center capitalize text-primary-color1 text-base
+              border-[3px] border-primary-color1 border-b-transparent rounded-t-3xl left-[50%] translate-x-[-50%] py-2
+              w-[70%] max-w-[90%]
+              lg:text-md
+              md:text-sm
+              sm:text-xs"
+        >
+          <span className="font-bold">Owner : </span>
+          {owner.userName}
+        </div>
+      )}
+      {/* image holder */}
+      <div
+        id="project-image-holder "
+        className={`w-full h-[180px] min-h-[180px] max-w-full flex relative justify-between text-white capitalize rounded-3xl
+                before:top-0 before:invisible before:w-full before:h-full before:rounded-3xl before:absolute before:via-transparent before:ease-in-out
+                before:to-transparent before:bg-gradient-to-t before:from-black/70 before:z-10 before:duration-300 before:opacity-0
+                group-hover:before:visible group-hover:before:opacity-100
+                `}
+      >
+        {img?.path ? (
+          <LazyLoadImage
+            effect="opacity"
+            height="100%"
+            width="100%"
+            className="rounded-3xl h-full w-full object-cover"
+            src={img?.path}
+            alt={`project-image-${img?.name}`}
+          />
+        ) : (
+          <div
+            className={`h-full w-full flex rounded-3xl justify-center items-center text-primary-color3 relative
+                `}
+          >
+            {lang === "en" ? "No Image" : "لا توجد صورة"}
+          </div>
+        )}
+        <span
+          className={`absolute top-0 opacity-0 invisible duration-300 group-hover:visible group-hover:opacity-100 flex justify-center items-end pb-4 z-20
+              w-full h-full font-semibold rounded-b-3xl
+              xl:lg
+              lg:md
+              md:text-sm
+              sm:text-xs`}
+        >
+          {name}
+        </span>
+      </div>
+      <Line bcolor="#B0D8C4" color="#6C9583" h="0.5px" w="70%" />
+      {/* project info */}
+      <div className="w-full grid grid-cols-2 place-items-center place-content-center px-5 py-5 gap-3">
+        {projectsInfoText.map((project, li) => (
+          <p
+            key={`${li}-list-info`}
+            className="gap-1 w-full font-semibold capitalize text-primary-color1 truncate
+                md:text-sm
+                sm:text-xs"
+          >
+            {project.name}
+            <span className="font-normal ml-1 ">{project.val}</span>
+          </p>
+        ))}
+      </div>
+      {isOwner ? (
+        subDate.length >= 1 ? (
+          <SecondaryBtn
+            text={lang === "ar" ? "عرض تواريخ المشروع" : "show projects date"}
+            style={`truncate !absolute
+                    sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16 !bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16
+                    `}
+            action={() => {
+              setProjectShowDates({
+                path: name,
+                subDate: subDate,
+              });
+            }}
+          />
+        ) : (
+          <SecondaryLink
+            style={`truncate !absolute
+                  sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16 !bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16
+                  `}
+            linkTo={name}
+            text={lang === "ar" ? "مشاهدة المشروع" : "view project"}
+          />
+        )
+      ) : subDate.length >= 1 ? (
+        <SecondaryBtn
+          text={lang === "ar" ? "عرض تواريخ المشروع" : "show projects date"}
+          style={`truncate !absolute
+                  sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16 !bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16
+                `}
+          action={() => {
+            setProjectShowDates({
+              subDate: subDate,
+              path: `access-project/${owner.userName}/${name}`,
+            });
+          }}
+        />
+      ) : (
+        <SecondaryLink
+          style={`truncate !absolute
+                sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16 !bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16
+              `}
+          linkTo={`access-project/${owner.userName}/${name}`}
+          text={lang === "ar" ? "مشاهدة المشروع" : "view project"}
+        />
+      )}
+    </div>
+  );
+}

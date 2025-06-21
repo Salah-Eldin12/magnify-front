@@ -1,0 +1,67 @@
+# Node.js dependencies
+node_modules/
+
+# Version control
+.git/
+.gitignore
+
+# IDE/editor settings
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build outputs
+build/
+dist/
+out/
+tmp/
+temp/
+
+# Logs and debug
+*.log
+debug/
+
+# Test and coverage
+coverage/
+*.test.js
+test/
+tests/
+
+# Environment and secrets
+.env*
+*.env
+*.pem
+*.key
+*.crt
+
+# Local configuration
+config.local.*
+*.local.yml
+.local/
+local/
+
+# Documentation
+README*
+*.md
+docs/
+
+# Temporary files
+*.tmp
+
+# Miscellaneous
+.svn/
+.hg/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore video and design source files in public/assets (if not needed in build)
+public/assets/*.mp4
+public/assets/*.ps
+
+# Ignore browserconfig and manifest if not needed (uncomment if not required)
+# public/browserconfig.xml
+# public/manifest.json
+# public/site.webmanifest

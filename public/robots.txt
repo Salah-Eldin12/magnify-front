@@ -1,0 +1,9 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Disallow:/dashboard
+Disallow:/dashboard/create-user
+Disallow:/dashboard/project-upload-files
+Disallow:/logout
+Disallow:/upload-files
+Disallow:/upload-files/missing-photo
+Disallow:/upload-files/session-data
