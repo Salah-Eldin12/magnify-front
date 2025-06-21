@@ -62,13 +62,13 @@ export default function UserProjects() {
         ${user?.projectsData?.length >= 4 && ""}`}
       >
         {/* search by name */}
-        <div className="grid grid-cols-12 justify-between items-center w-full border-b border-seconder-color1 pb-3">
+        <div className="grid sm:grid-cols-2 xl:grid-cols-7 justify-between items-center w-full border-b border-seconder-color1 pb-3">
           <h3
-            className="text-primary-color1 capitalize gap-2 font-semibold col-span-5
-          xl:text-2xl
+            className="text-primary-color1 capitalize gap-2 font-semibold 
+          xl:text-2xl xl:col-span-2
           lg:text-xl
           md:text-lg
-          sm:text-base"
+          sm:text-base sm:col-span-1"
           >
             {getText("Your Projects ", "المشاريع")}
           </h3>
