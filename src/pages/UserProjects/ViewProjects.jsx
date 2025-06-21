@@ -10,6 +10,7 @@ import { FaFileCircleXmark } from "react-icons/fa6";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 const ServerUrl = import.meta.env.VITE_APP_PROJECTS_FOLDER;
+const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
 
 export default function ViewProjects() {
   const [loading, setLoading] = useState(false);
