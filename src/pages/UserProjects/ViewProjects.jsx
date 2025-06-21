@@ -78,10 +78,7 @@ export default function ViewProjects() {
             muted
             loop
           >
-            <source
-              src={serverImagesPath + "logo/logo animation.mp4"}
-              type="video/mp4"
-            />
+            <source src="/assets/logo animation.mp4" type="video/mp4" />
           </video>
         </div>
       )}
