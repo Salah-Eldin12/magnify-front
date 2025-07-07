@@ -23,71 +23,69 @@ const Navbar = ({ setPopUp, logoStyle, type }) => {
     window.location.reload();
   }, [lang]);
 
-  const langDir = lang === "ar" ? "rtl" : "ltr";
+  const getText = (enText, arText) => {
+    return lang === "en" || !lang ? enText : arText;
+  };
   if (type === "logout") {
     return;
   }
-  return !user || type === "not-found" ? (
-    <nav
-      dir={langDir}
-      className={`flex container max-w-full static top-0 h-fit mt-3 ${
-        logoStyle ? "justify-between" : "justify-end"
-      } items-center w-full `}
-    >
-      {logoStyle && (
-        <img
-          src={serverImagesPath + "logo/mainLogo2.svg"}
-          alt="magnify-logo"
-          className={` sm:w-[90px] md:w-[110px] lg:w-[130px]`}
-        />
-      )}
-      <button
-        onClick={handleChangeLang}
-        dir="ltr"
-        className="btn bg-transparent flex gap-1 items-center text-primary-color1 font-medium
-            hover:bg-primary-color1 hover:text-white 
-            
-            md:text-base
-            sm:text-sm"
-      >
-        <GrLanguage className="sm:text-sm md:text-base" />
-        <span> {lang === "ar" ? "EN" : "AR"}</span>
-      </button>
-    </nav>
-  ) : (
-    <nav className="items-center flex justify-between sticky  bg-primary-color1 container max-w-full py-3 top-0  ">
-      <img
-        src={serverImagesPath + "/logo/mainLogo.svg"}
-        alt="magnify-logo"
-        className="sm:w-[90px] md:w-[110px]"
-      />
-      <div
-        className="flex justify-center items-center   
+  return (
+    <header dir="ltr" className="w-full max-w-full static top-0 flex">
+      {!user || type === "not-found" ? (
+        <nav
+          className={`flex container max-w-full  h-fit mt-3 ${
+            logoStyle ? "justify-between" : "justify-end"
+          } items-center w-full `}
+        >
+          {logoStyle && (
+            <img
+              src={serverImagesPath + "logo/mainLogo2.svg"}
+              alt="magnify-logo"
+              className={` sm:w-[90px] md:w-[110px] lg:w-[130px]`}
+            />
+          )}
+          <button
+            onClick={handleChangeLang}
+            className="btn bg-transparent flex gap-1 items-center text-primary-color1 font-medium
+            hover:bg-primary-color1 hover:text-white text-base"
+          >
+            <GrLanguage className="sm:text-sm md:text-base" />
+            <span> {getText("EN", "AR")}</span>
+          </button>
+        </nav>
+      ) : (
+        <nav className="items-center flex justify-between sticky w-full max-w-full bg-primary-color1 container  py-3 top-0  ">
+          <img
+            src={serverImagesPath + "/logo/mainLogo.svg"}
+            alt="magnify-logo"
+            className="sm:w-[90px] md:w-[110px]"
+          />
+          <div
+            className="flex justify-center items-center   
       md:gap-5
       sm:gap-2"
-        dir={langDir}
-      >
-        <button
-          id="focus-btn"
-          dir="ltr"
-          onClick={handleChangeLang}
-          className="uppercase flex gap-2 items-center btn-ghost btn btn-sm text-lightGreen font-normal"
-        >
-          <GrLanguage size={20} />
-          {lang === "ar" ? "en" : "ar"}
-        </button>
-        <button
-          id="focus-btn"
-          dir={langDir}
-          onClick={Logout}
-          className="text-primary-color1 font-normal btn btn-sm border-none bg-lightGreen/70 flex items-center gap-1
+          >
+            <button
+              id="focus-btn"
+              onClick={handleChangeLang}
+              className="uppercase flex gap-2 items-center btn-ghost btn btn-sm text-lightGreen font-normal"
+            >
+              <GrLanguage size={20} />
+              {getText("EN", "AR")}
+            </button>
+            <button
+              id="focus-btn"
+              onClick={Logout}
+              className="text-primary-color1 font-normal btn btn-sm border-none bg-lightGreen/70 flex items-center gap-1
           hover:bg-lightGreen duration-200"
-        >
-          <LuLogOut />
-          <span>{lang === "ar" ? "تسجيل خروج" : "Log out"}</span>
-        </button>
-      </div>
-    </nav>
+            >
+              <LuLogOut />
+              <span>{getText("Log out", "تسجيل خروج")}</span>
+            </button>
+          </div>
+        </nav>
+      )}
+    </header>
   );
 };
 

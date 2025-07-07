@@ -1,17 +1,21 @@
-import React from "react";
 import { SecondaryBtn, SecondaryLink } from "../Btns";
 import { Line } from "../Line";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { NotFound } from "../NotFound";
 import { useQuery } from "react-query";
 import { useLang } from "../../context/LangContext";
 import axios from "axios";
 import ProjectSkeleton from "../Skeletons/ProjectSkeleton";
+import { FaImages } from "react-icons/fa6";
+import { useState } from "react";
+import { ImgSkeleton } from "../Skeletons/ImgSkeleton";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 export default function FetchProject({ setProjectShowDates, user, projectID }) {
+  const [loadingImg, setLoadingImg] = useState(true);
   const { lang } = useLang();
+  const getText = (enText, arText) =>
+    lang === "en" || !lang ? enText : arText;
 
   const {
     error,
@@ -51,27 +55,27 @@ export default function FetchProject({ setProjectShowDates, user, projectID }) {
 
   const projectsInfoText = [
     {
-      name: lang === "ar" ? "الموقع:" : `location:`,
+      name: getText("location:", "الموقع:"),
       val: location,
     },
     {
-      name: lang === "ar" ? "نوع المشروع:" : `type:`,
+      name: getText("type:", "نوع المشروع:"),
       val: type,
     },
     {
-      name: lang === "ar" ? "التاريخ:" : `date:`,
+      name: getText("date:", "التاريخ:"),
       val: date && new Date(date).toISOString().split("T")[0],
     },
     {
-      name: lang === "ar" ? "المساحة:" : `  area:`,
+      name: getText("area:", "المساحة:"),
       val: area,
     },
     {
-      name: lang === "ar" ? "الارتفاع:" : ` height:`,
+      name: getText("height:", "الارتفاع:"),
       val: height,
     },
     {
-      name: lang === "ar" ? "المدة:" : `duration:`,
+      name: getText("duration:", "المدة:"),
       val: duration,
     },
   ];
@@ -81,7 +85,7 @@ export default function FetchProject({ setProjectShowDates, user, projectID }) {
   return (
     <div
       id="project-info"
-      className={`grid sm:w-10/12 lg:w-full max-w-[350px] place-items-center rounded-3xl bg-lightGreen relative sm:mb-24 mt-5 grid-flow-row group`}
+      className={`grid sm:w-11/12 lg:w-full max-w-[350px] place-items-center rounded-3xl bg-lightGreen relative sm:mb-24 mt-5 grid-flow-row group`}
     >
       {/* project owner shape  */}
       {!isOwner && (
@@ -97,7 +101,7 @@ export default function FetchProject({ setProjectShowDates, user, projectID }) {
           {owner.userName}
         </div>
       )}
-      {/* image holder */}
+      {/* project image */}
       <div
         id="project-image-holder "
         className={`w-full h-[180px] min-h-[180px] max-w-full flex relative justify-between text-white capitalize rounded-3xl
@@ -107,20 +111,23 @@ export default function FetchProject({ setProjectShowDates, user, projectID }) {
                 `}
       >
         {img?.path ? (
-          <LazyLoadImage
-            effect="opacity"
-            height="100%"
-            width="100%"
-            className="rounded-3xl h-full w-full object-cover"
-            src={img?.path}
-            alt={`project-image-${img?.name}`}
-          />
+          <>
+            {loadingImg && <ImgSkeleton />}
+            <img
+              src={img?.path}
+              alt={`project-image-${img?.name}`}
+              className={`rounded-3xl h-full w-full object-cover ${
+                loadingImg ? "hidden" : "block"
+              }`}
+              onLoad={() => setLoadingImg(false)}
+            />
+          </>
         ) : (
-          <div
-            className={`h-full w-full flex rounded-3xl justify-center items-center text-primary-color3 relative
-                `}
-          >
-            {lang === "en" ? "No Image" : "لا توجد صورة"}
+          <div className="h-full w-full flex rounded-3xl justify-center items-center text-primary-color3 relative flex-col gap-3">
+            <FaImages size={60} />
+            <span className="font-semibold">
+              {getText("Project Image", "صورة المشروع")}
+            </span>
           </div>
         )}
         <span
@@ -140,9 +147,7 @@ export default function FetchProject({ setProjectShowDates, user, projectID }) {
         {projectsInfoText.map((project, li) => (
           <p
             key={`${li}-list-info`}
-            className="gap-1 w-full font-semibold capitalize text-primary-color1 truncate
-                md:text-sm
-                sm:text-xs"
+            className="gap-1 w-full font-semibold capitalize text-primary-color1 truncate text-sm"
           >
             {project.name}
             <span className="font-normal ml-1 ">{project.val}</span>
@@ -152,7 +157,7 @@ export default function FetchProject({ setProjectShowDates, user, projectID }) {
       {isOwner ? (
         subDate.length >= 1 ? (
           <SecondaryBtn
-            text={lang === "ar" ? "عرض تواريخ المشروع" : "show projects date"}
+            text={getText("show projects date", "عرض تواريخ المشروع")}
             style={`truncate !absolute
                     sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16 !bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16
                     `}
@@ -169,12 +174,12 @@ export default function FetchProject({ setProjectShowDates, user, projectID }) {
                   sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16 !bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16
                   `}
             linkTo={name}
-            text={lang === "ar" ? "مشاهدة المشروع" : "view project"}
+            text={getText("view project", "مشاهدة المشروع")}
           />
         )
       ) : subDate.length >= 1 ? (
         <SecondaryBtn
-          text={lang === "ar" ? "عرض تواريخ المشروع" : "show projects date"}
+          text={getText("show projects date", "عرض تواريخ المشروع")}
           style={`truncate !absolute
                   sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16 !bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16
                 `}
@@ -191,7 +196,7 @@ export default function FetchProject({ setProjectShowDates, user, projectID }) {
                 sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16 !bottom !left-[50%] !translate-x-[-50%] lg:-bottom-14 sm:-bottom-16
               `}
           linkTo={`access-project/${owner.userName}/${name}`}
-          text={lang === "ar" ? "مشاهدة المشروع" : "view project"}
+          text={getText("view project", "مشاهدة المشروع")}
         />
       )}
     </div>

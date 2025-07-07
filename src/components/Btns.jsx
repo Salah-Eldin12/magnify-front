@@ -1,5 +1,3 @@
-import React from "react";
-import { AiOutlineUserAdd } from "react-icons/ai";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import { RiMailAddFill } from "react-icons/ri";
 import { Link } from "react-router-dom";
@@ -33,11 +31,11 @@ export const SecondaryBtn = ({
     <button
       disabled={disabled}
       id={id ? id : "focus-btn"}
-      className={`btn capitalize py-3 rounded-[48px] bg-darkGreen text-white sm:min-w-[180px] lg:min-w-[230px] gap-2
+      className={`capitalize py-3 rounded-[48px] bg-darkGreen text-white sm:min-w-[180px] lg:min-w-[230px] gap-2
       ${style} flex justify-center outline-none !border 
       sm:text-sm md:text-md 
     hover:bg-white hover:text-darkGreen !border-primary-color3 duration-300
-    disabled:bg-darkGreen/50 disabled:text-white `}
+    disabled:bg-darkGreen/50 disabled:text-white disabled:cursor-not-allowed`}
       onClick={action && action}
       type={type}
     >

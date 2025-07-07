@@ -38,15 +38,11 @@ export default function ViewProjects() {
 
   if (isError)
     return (
-      <NotFound
-        text={getText(
-          "Your project files has not been uploaded yet, please wait until the project is uploaded",
-          "لم يتم رفع ملفات المشروع الخاص بك حتي الان، رجاءا انتظر حتي يتم رفع المشروع"
-        )}
-        status={"404"}
-        icon={
-          <FaFileCircleXmark className="text-primary-color1 sm:text-[100px] md:text-[120px] lg:text-[180px]" />
-        }
+      <Navigate
+        to={"/no-project-found"}
+        state={{
+          err: "no-project-found",
+        }}
       />
     );
 

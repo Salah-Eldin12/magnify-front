@@ -68,18 +68,18 @@ export default function CreatePass() {
       >
         {popUp && (
           <PopUp
-            text={
-              lang === "ar"
-                ? "لقد تم تغيير كلمة المرور الخاصة بك بنجاح"
-                : "Your password has been changed successfully"
-            }
+            text={getText(
+              "Your password has been changed successfully",
+              "لقد تم تغيير كلمة المرور الخاصة بك بنجاح"
+            )}
+            btnText={getText(
+              "Go to login page",
+              "الذهاب الى صفحة تسجيل الدخول"
+            )}
             iconImage={serverImagesPath + "/icon2.svg"}
+            
             action={() => {
-              window.location.replace("/");
-              cookie.remove("user_token", {
-                path: "/",
-                secure: true,
-              });
+              window.location.replace("/login?email=" + user.email);
             }}
           />
         )}

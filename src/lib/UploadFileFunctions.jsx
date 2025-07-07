@@ -56,6 +56,8 @@ export const UploadFiles = async ({
       }, 2000);
     })
     .catch((err) => {
+      console.log(err);
+
       setUploaded(0);
       setUploading(false);
       setMsg({

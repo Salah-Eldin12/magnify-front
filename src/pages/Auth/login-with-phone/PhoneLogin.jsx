@@ -38,7 +38,6 @@ export const PhoneLogin = () => {
         sm:w-full "
       >
         <img
-          loading="lazy"
           src={serverImagesPath + "icon11.svg"}
           alt="phone-icon"
           className="sm:w-[140px] md:w-[170px] lg:w-[150px] max-w-[150px]"
@@ -68,7 +67,7 @@ export const PhoneLogin = () => {
             <Form className="w-full flex flex-col items-center gap-4">
               <div className="flex w-full items-center gap-3 flex-col justify-center">
                 {error && (
-                  <div className="sm:text-xs md:text-sm flex items-center rounded-xl gap-2 text-error">
+                  <div className="sm:text-sm flex items-center rounded-xl gap-2 text-error">
                     <MdOutlineErrorOutline size={20} />
                     <span>{error}</span>
                   </div>
@@ -98,7 +97,7 @@ export const PhoneLogin = () => {
                 </span>
                 <p
                   className="text-primary-color1 capitalize
-          sm:text-xs md:text-md "
+          sm:text-sm md:text-md "
                 >
                   {getText("Sign Up With", "التسجيل عبر")}
                   <Link

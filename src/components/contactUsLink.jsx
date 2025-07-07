@@ -6,10 +6,8 @@ export const ContactUsLink = ({ type }) => {
   const { lang } = useLang();
   const langDir = lang === "ar" ? "rtl" : "ltr";
 
-  const getText = useMemo(
-    () => (enText, arText) => lang === "en" || !lang ? enText : arText,
-    [lang]
-  );
+  const getText = (enText, arText) =>
+    lang === "en" || !lang ? enText : arText;
 
   return (
     <footer

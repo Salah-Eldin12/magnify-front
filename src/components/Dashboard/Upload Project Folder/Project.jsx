@@ -1,5 +1,4 @@
 import axios from "axios";
-import React from "react";
 import { FaUpload } from "react-icons/fa";
 import { useQuery } from "react-query";
 

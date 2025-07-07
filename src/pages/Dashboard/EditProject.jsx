@@ -323,6 +323,16 @@ export default function EditProject() {
                 <SecondaryBtn
                   loading={submiting}
                   disabled={submiting}
+                  action={() => {
+                    navigate(-1);
+                  }}
+                  style="!w-[180px] !bg-transparent border-darkGreen !text-primary-color2
+                  hover:!bg-darkGreen hover:!text-white"
+                  text={getText("back", "رجوع")}
+                />
+                <SecondaryBtn
+                  loading={submiting}
+                  disabled={submiting}
                   type="submit"
                   style="!w-[180px]"
                   text={getText("Save Data", "حفظ التعديلات")}

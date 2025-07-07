@@ -95,25 +95,27 @@ const FormContainer = ({ lang, QREmail }) => {
       >
         {({ errors, touched, values, handleChange }) => {
           return (
-            <Form className="w-full h-full flex flex-col justify-between items-center gap-8">
+            <Form
+              className="w-full h-full flex flex-col justify-between items-center gap-5
+            sm:gap-8 lg:gap-5"
+            >
               {/* Top form group */}
               <div className="w-full flex flex-col gap-3 items-center">
                 <img
                   src={serverImagesPath + "logo/mainLogo.svg"}
                   alt="magnify logo"
-                  className="sm:w-[150px] md:w-[250px] lg:w-[250px]"
+                  className="sm:w-[170px] md:w-[250px] lg:w-[250px]"
                 />
                 <h2
                   className="capitalize w-full font-light text-lightGreen text-center
-xl:text-2xl lg:text-xl md:text-2xl sm:text-lg"
+xl:text-2xl lg:text-xl md:text-2xl sm:text-xl"
                 >
                   {getText("Log in", "تسجيل الدخول")}
                 </h2>
                 {error && (
                   <span
                     className={`text-center text-white flex items-center gap-3 justify-center w-full bg-red-500 px-3 py-2 rounded-lg
-sm:text-xs
-md:text-sm`}
+sm:text-sm`}
                   >
                     {error}
                   </span>
@@ -159,7 +161,7 @@ md:text-sm`}
                 <div className="flex justify-between px-2">
                   <label
                     htmlFor="remember-me"
-                    className="cursor-pointer text-textColor2 capitalize flex items-center gap-1 sm:text-xs md:text-sm "
+                    className="cursor-pointer text-textColor2 capitalize flex items-center gap-1 text-sm "
                   >
                     <input
                       type="checkbox"
@@ -181,7 +183,7 @@ md:text-sm`}
                   </label>
                   <Link
                     to="/forgot-password"
-                    className="text-textColor2 hover:text-primary-color4 duration-300 sm:text-xs md:text-sm  "
+                    className="text-textColor2 hover:text-primary-color4 duration-300 text-sm  "
                   >
                     {getText("Forgot password?", "نسيت كلمة المرور؟")}
                   </Link>
@@ -196,13 +198,13 @@ md:text-sm`}
                 />
                 <span
                   className="text-lightGreen capitalize
-sm:text-xs md:text-md "
+                  sm:text-sm md:text-md "
                 >
                   {getText("or", "او")}
                 </span>
                 <p
                   className="text-lightGreen capitalize
-sm:text-xs md:text-md "
+                  sm:text-sm md:text-md "
                 >
                   {getText("Sign Up With", "التسجيل عبر")}
                   <Link

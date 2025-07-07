@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 /////// components
 import { QR } from "../../components/Qr";
 import { useLang } from "../../context/LangContext";
@@ -7,9 +12,9 @@ import { SecondaryLink } from "../../components/Btns";
 import { PopUp } from "../../components/PopUp";
 import { HandleDelete } from "../../lib/DashboardReq";
 import { InputSearch } from "../../components/inputSearch";
+import UsersTable from "../../components/Dashboard/UsersTable";
 /////// layout
 import MainLayout from "../../Layout/MainLayout";
-import UsersTable from "../../components/Dashboard/UsersTable";
 // icons
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import { NotFound } from "../../components/NotFound";
@@ -34,12 +39,11 @@ export function Dashboard() {
 
   if (!user.isAdmin) {
     return (
-      <NotFound
-        status={401}
-        text={getText(
-          "You are unauthorized to this page",
-          "لا تمتلك الصلاحية لعرض هذه الصفحة"
-        )}
+      <Navigate
+        to={"/unauthorized"}
+        state={{
+          err: "unauthorized",
+        }}
       />
     );
   }
@@ -48,9 +52,6 @@ export function Dashboard() {
   const setPageParam = (page) => {
     setPage(page);
   };
-  useEffect(() => {
-    setSearchParams({ page: page });
-  }, [location.pathname, searchParams]);
 
   return (
     <MainLayout

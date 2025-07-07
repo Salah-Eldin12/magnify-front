@@ -30,12 +30,11 @@ export default function UserProjects() {
 
   if (userName !== user?.userName || !user?._id) {
     return (
-      <NotFound
-        status={401}
-        text={getText(
-          "You are unauthorized to this page",
-          "لا تمتلك الصلاحية لعرض هذه الصفحة"
-        )}
+      <Navigate
+        to={"/unauthorized"}
+        state={{
+          err: "unauthorized",
+        }}
       />
     );
   }

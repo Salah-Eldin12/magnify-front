@@ -1,14 +1,10 @@
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useLang } from "../context/LangContext";
-import cookie from "react-cookies";
+import { CopyRight } from "./CopyRight";
 
-const user = cookie.load("user_token");
-
-export const Footer = () => {
+export const Footer = ({ type }) => {
   const { lang } = useLang();
   const location = useLocation().pathname;
-
   const getText = (enText, arText) =>
     lang === "en" || !lang ? enText : arText;
 
@@ -30,9 +26,6 @@ export const Footer = () => {
     },
   ];
 
-  if (location === "logout") {
-    return;
-  }
 
   if (location === "/" || location === "/login") {
     return (
@@ -55,19 +48,28 @@ export const Footer = () => {
       </footer>
     );
   } else if (
-    location.includes("/user") ||
-    (location.includes("/dashboard") && user)
+    (location?.includes("/user/") || location?.includes("dashboard")) &&
+    !type?.includes("not-found")
   ) {
+    return <CopyRight />;
+  } else if (type?.includes("not-found")) {
     return (
       <footer
-        className="footer-center footer bg-primary-color3 py-3 text-white h-fit
-
-md:text-sm
-sm:text-xs"
+        id="footer"
+        className={`footer flex justify-center items-start text-primary-color1 gap-1 
+    sm:text-sm sm:pb-16
+    md:text-md md:pb-28
+    lg:!pb-3`}
       >
-        {lang === "ar"
-          ? "Copyrights@2024 magnify جميع الحقوق محفوظة   ."
-          : "Copyrights@2024 magnify All rights reserved ."}
+        <span id="need-help">
+          {getText("Do You Need Help?", "هل تحتاج مساعدة؟")}
+        </span>
+        <Link
+          className="font-bold hover:text-primary-color3"
+          to={"https://magnify-vt.com/contact/"}
+        >
+          {getText("Contact Us", "تواصل معنا")}
+        </Link>
       </footer>
     );
   } else if (location === "/logout") {
@@ -86,8 +88,7 @@ sm:text-xs"
       (location === "/forgot-password" && "sm:!pb-24 md:pb-28") ||
       (location === "/phone-login" && "sm:!pb-12 md:pb-28") ||
       (location === "/verify-otp" && "sm:!pb-24 md:pb-28") ||
-      (location === "/create-password" && "sm:!pb-20 md:pb-28") ||
-      (location === "/not-found" && "sm:!pb-3")
+      (location === "/create-password" && "sm:!pb-20 md:pb-28")
     }
   `}
       >

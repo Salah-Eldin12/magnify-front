@@ -1,32 +1,28 @@
-import React from "react";
 import { useLang } from "../context/LangContext";
 import MainLayout from "../Layout/MainLayout";
-import { Link, Navigate } from "react-router-dom";
-import cookie from "react-cookies";
+import { Link, useLocation } from "react-router-dom";
+import { FaFileCircleXmark } from "react-icons/fa6";
 
-const userCookies = cookie.load("user_token");
 const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
 
-export function NotFound({ text, status, icon }) {
+export function NotFound() {
+  const location = useLocation();
   const { lang } = useLang();
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
   };
 
-  return !userCookies ? (
-    <Navigate to={"/"} replace />
-  ) : (
+  const err = location && location?.state?.err == "unauthorized" ? 401 : 404;
+
+  return (
     <MainLayout
       type="not-found"
-      pageTitle={getText(
-        `Error ${status ? status : 404}`,
-        `خطا ${status ? status : 404}`
-      )}
+      pageTitle={getText(`Error ${err}`, `خطا ${err}`)}
     >
       <section className="h-full w-full flex justify-center items-center flex-col gap-5 container max-w-full">
         {/* image */}
-        {icon ? (
-          icon
+        {location?.state?.err === "no-project-found" ? (
+          <FaFileCircleXmark className="text-primary-color1 sm:text-[100px] md:text-[120px] lg:text-[180px]" />
         ) : (
           <img
             src={serverImagesPath + "not-found.svg"}
@@ -42,7 +38,7 @@ export function NotFound({ text, status, icon }) {
               sm:text-[65px]
               md:text-[85px]"
           >
-            {status ? status : 404}
+            {err}
           </h5>
 
           <div
@@ -51,8 +47,18 @@ export function NotFound({ text, status, icon }) {
             md:text-base
             lg:text-lg"
           >
-            {text ? (
-              text
+            {location?.state?.err ? (
+              location?.state?.err === "unauthorized" ? (
+                getText(
+                  "You are unauthorized to this page",
+                  "لا تمتلك الصلاحية لعرض هذه الصفحة"
+                )
+              ) : (
+                getText(
+                  "Your project files has not been uploaded yet, please wait until the project is uploaded",
+                  "لم يتم رفع ملفات المشروع الخاص بك حتي الان، رجاءا انتظر حتي يتم رفع المشروع"
+                )
+              )
             ) : (
               <div className="text-center flex flex-col gap-1">
                 <span>

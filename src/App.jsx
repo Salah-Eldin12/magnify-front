@@ -1,5 +1,5 @@
 import "./App.css";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 // pages
 import { NotFound } from "./components/NotFound";
 import { UserData } from "./pages/Dashboard/UserData";
@@ -20,6 +20,7 @@ import { ProdectedRouterAuth } from "./pages/Auth/ProtectedRoutes";
 import CreatePass from "./pages/Auth/CreatePass";
 import SendVerifyEmail from "./pages/Auth/sendVerifyEmail";
 import Login from "./pages/Auth/Login";
+import { NotFoundDashboard } from "./pages/Dashboard/NotFoundDashboard";
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
         <Route path=":clientID" element={<UserData />} />
         <Route path="project-upload-files" element={<SearchProject />} />
         <Route path=":clientID/project/:projectID" element={<EditProject />} />
+        <Route path="not-found" element={<NotFoundDashboard />} />
       </Route>
       {/* user client route */}
       <Route path="/user/:userName">

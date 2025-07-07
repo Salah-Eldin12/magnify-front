@@ -23,6 +23,9 @@ export const PopUp = ({
   useEffect(() => {
     setShow(!show);
   }, []);
+  const getText = (en, ar) => {
+    return lang === "en" || !lang ? en : ar;
+  };
 
   return (
     <div
@@ -58,20 +61,20 @@ export const PopUp = ({
         </div>
         {type === "yes-no" ? (
           //  logout popUp
-          <div className="flex gap-5 justify-center w-full">
+          <div id="buttons" className="flex gap-5 justify-center w-full">
             <SecondaryBtn
-              text={lang === "ar" ? "الغاء" : "cancel"}
+              text={getText("Cancel", "الغاء")}
               action={noAction}
               type="button"
-              style="!py-2 bg-transparent !text-darkGreen hover:!bg-darkGreen hover:!text-white w-6/12 !px-0 sm:!px-0 !min-w-fit
+              style="!py-3 bg-transparent !text-darkGreen hover:!bg-darkGreen hover:!text-white w-6/12 !px-0 sm:!px-0 !min-w-fit
               md:!text-sm 
               sm:!text-xs "
             />
             <SecondaryBtn
-              text={btnText ? btnText : lang === "ar" ? "نعم" : "yes"}
+              text={btnText ? btnText : getText("Yes", "نعم")}
               action={yesAction}
               type="button"
-              style="!py-2 md:!text-sm w-6/12 sm:!px-0 !min-w-fit
+              style="!py-3 md:!text-sm w-6/12 sm:!px-0 !min-w-fit
               sm:!text-xs "
               disabled={hidden}
             />
@@ -79,12 +82,12 @@ export const PopUp = ({
         ) : (
           // create password popUp
           <SecondaryBtn
-            text={lang === "ar" ? "حسنا" : "ok"}
+            text={btnText ? btnText : getText("ok", "حسنا")}
             action={action}
             type="button"
             style="
-            !py-1 md:!text-base md:!px-20 
-              sm:!text-base sm:!px-11 "
+            !py-3 md:!text-base md:!px-20 
+              sm:!text-base sm:!px-11 !normal-case"
           />
         )}
       </div>

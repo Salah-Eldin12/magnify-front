@@ -218,6 +218,15 @@ export default function UserInfo({ clientData }) {
                 {msg.msg}
               </span>
               <SecondaryBtn
+                type={"button"}
+                action={() => {
+                  navigate(-1);
+                }}
+                style="!w-[180px] !bg-transparent border-darkGreen !text-primary-color2
+                              hover:!bg-darkGreen hover:!text-white"
+                text={getText("back", "رجوع")}
+              />
+              <SecondaryBtn
                 disabled={submiting}
                 loading={submiting}
                 type="submit"

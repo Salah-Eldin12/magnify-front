@@ -31,7 +31,7 @@ export const HandleSendVerify = async ({ setSending, email }) => {
       emailType: "verifyEmail",
     })
     .then((res) => {
-      // return window.location.assign(`/check-email/${res.data.verifyLink}`);
+      return window.location.assign(`/check-email/${res.data.verifyLink}`);
     })
     .catch((err) => console.log(err))
     .finally(() => setSending(false));

@@ -158,6 +158,9 @@ export default function UploadPage() {
     ),
   });
   const pageName = location.includes("missing-photo");
+
+  console.log("uploaded", uploaded, "//////", "uploading", uploading);
+
   return (
     <MainLayout
       type="upload-files"
@@ -299,7 +302,7 @@ export default function UploadPage() {
                   </span>
                 )}
                 {/* uploading progress */}
-                {uploaded > 0 && (
+                {uploading && (
                   <span
                     perc={`${uploaded}%`}
                     className="w-full h-3 bg-gray-200 relative rounded-xl 
@@ -314,7 +317,7 @@ export default function UploadPage() {
                 )}
                 {/* upload button */}
                 <div className=" gap-3 flex items-center flex-col w-full ">
-                  {uploaded === 0 && (
+                  {!uploading && (
                     <InputContainer
                       errors={errors.projectName}
                       touched={touched.projectName}

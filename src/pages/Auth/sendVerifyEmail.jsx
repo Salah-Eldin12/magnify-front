@@ -19,7 +19,12 @@ export default function SendVerifyEmail() {
   const { id } = useParams();
   const { lang } = useLang();
   const [sending, setSending] = useState(false);
+  // Handle text based on language
+  const getText = (enText, arText) => {
+    return lang === "en" || !lang ? enText : arText;
+  };
 
+  
   const {
     isLoading,
     isRefetching,
@@ -44,7 +49,10 @@ export default function SendVerifyEmail() {
   const { email } = user;
 
   return (
-    <MainLayout type={"verify-email"}>
+    <MainLayout
+      type={"verify-email"}
+      pageTitle={getText("Verify Email", "التحقق من اليريد الالكتروني")}
+    >
       <section
         className=" flex flex-col items-center justify-center h-full container max-w-[1000px]
         lg:w-3/6 

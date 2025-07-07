@@ -20,14 +20,15 @@ function MainLayout({ children, type, pageTitle }) {
       ${lang === "en" ? "font-['Montserrat'] " : "font-['Cairo']"} `}
     >
       <title>{pageTitle}</title>
+
       {popUp && (
         <PopUp
           setPopUp={setPopUp}
           iconImage={icon3}
           text={
             lang === "ar"
-              ? " هل أنت متأكد أنك تريد تسجيل الخروج من magnify portal  "
-              : "Are you sure you want to log out from magnify portal?"
+              ? "هل أنت متأكد أنك تريد تسجيل الخروج"
+              : "Are you sure you want to log out?"
           }
           type="yes-no"
           noAction={() => setPopUp(!popUp)}
@@ -36,9 +37,12 @@ function MainLayout({ children, type, pageTitle }) {
           }}
         />
       )}
-      <Navbar type={type} logoStyle={false} setPopUp={setPopUp} />
-      {children}
-      <Footer />
+
+      <>
+        <Navbar type={type} logoStyle={false} setPopUp={setPopUp} />
+        {children}
+        <Footer type={type} />
+      </>
     </section>
   );
 }

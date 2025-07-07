@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 import cookie from "react-cookies";
@@ -6,12 +6,13 @@ import cookie from "react-cookies";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import { BsSortAlphaDown } from "react-icons/bs";
 import { BiSortAlt2 } from "react-icons/bi";
-import { BiSolidError } from "react-icons/bi";
+import { FaUserSlash } from "react-icons/fa";
+
 // Components
 import { NotFoundInList } from "../NotFoundInList";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import UserTableSkeleton from "../Skeletons/UserTableSkeleton";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 // Constants
 const serverPath = import.meta.env.VITE_APP_API_BASE;
@@ -141,6 +142,7 @@ const UsersTable = ({
           />
         )}
       </table>
+
       {RenderUser?.length < 1 && !isLoading && !isRefetching && !error && (
         <NotFoundInList
           color="#497B62"
@@ -148,14 +150,20 @@ const UsersTable = ({
           textStyle="text-primary-color1"
         />
       )}
-      {error && (
-        <div className="h-full w-full flex flex-col gap-2 text-primary-color3 justify-center items-center">
-          <BiSolidError className="lg:text-8xl" />
-          <span className="text-2xl font-semibold">
-            {getText("Error 404", "خطأ 404")}
-          </span>
-        </div>
-      )}
+      {/* error and no user found */}
+      <div className="h-full w-full flex flex-col gap-2 text-primary-color3 justify-center items-center">
+        {error && (
+          <>
+            <FaUserSlash className="lg:text-8xl" />
+            <span className="text-xl font-semibold">
+              {getText(
+                "No users found yet, create some",
+                "لا يوجد مستخدمين حتى الآن، قم بإنشاء مستخدمين"
+              )}
+            </span>
+          </>
+        )}
+      </div>
     </div>
   );
 };
