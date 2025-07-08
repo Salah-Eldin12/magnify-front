@@ -1,9 +1,11 @@
 import { useLang } from "../context/LangContext";
 import MainLayout from "../Layout/MainLayout";
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { FaFileCircleXmark } from "react-icons/fa6";
+import cookie from "react-cookies";
 
 const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
+const userCookies = cookie.load("user_token");
 
 export function NotFound() {
   const location = useLocation();
@@ -14,7 +16,9 @@ export function NotFound() {
 
   const err = location && location?.state?.err == "unauthorized" ? 401 : 404;
 
-  return (
+  return userCookies ? (
+    <Navigate to="/" replace />
+  ) : (
     <MainLayout
       type="not-found"
       pageTitle={getText(`Error ${err}`, `خطا ${err}`)}

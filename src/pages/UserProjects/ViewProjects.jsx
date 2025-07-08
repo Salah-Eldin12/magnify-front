@@ -1,25 +1,20 @@
 import { useState } from "react";
 import { useLang } from "../../context/LangContext";
 import { Navigate, useParams } from "react-router-dom";
-import { NotFound } from "../../components/NotFound";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { Loading } from "../../components/Loading";
 import { useUser } from "../../context/UserContext";
-import { FaFileCircleXmark } from "react-icons/fa6";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 const ServerUrl = import.meta.env.VITE_APP_PROJECTS_FOLDER;
-const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
 
 export default function ViewProjects() {
   const [loading, setLoading] = useState(false);
   const { lang } = useLang();
   const { userName, owner, projectName, date } = useParams();
   const { user } = useUser();
-  const getText = (enText, arText) => {
-    return lang === "en" || !lang ? enText : arText;
-  };
+
   // check for project is exist
   const folder = owner
     ? `${owner}|${projectName}${date ? "|" + date : ""}`
