@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
+const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
 
 export const PilotProjectView = () => {
   const { name } = useParams();
@@ -51,7 +52,10 @@ export const PilotProjectView = () => {
             muted
             loop
           >
-            <source src="/assets/logo animation.mp4" type="video/mp4" />
+            <source
+              src={serverImagesPath + "logo animation.mp4"}
+              type="video/mp4"
+            />
           </video>
         </div>
       )}

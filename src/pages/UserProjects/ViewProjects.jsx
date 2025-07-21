@@ -7,6 +7,7 @@ import { useUser } from "../../context/UserContext";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 const ServerUrl = import.meta.env.VITE_APP_PROJECTS_FOLDER;
+const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
 
 export default function ViewProjects() {
   const [loading, setLoading] = useState(false);
@@ -66,7 +67,10 @@ export default function ViewProjects() {
             muted
             loop
           >
-            <source src="/assets/logo animation.mp4" type="video/mp4" />
+            <source
+              src={serverImagesPath + "logo animation.mp4"}
+              type="video/mp4"
+            />
           </video>
         </div>
       )}
