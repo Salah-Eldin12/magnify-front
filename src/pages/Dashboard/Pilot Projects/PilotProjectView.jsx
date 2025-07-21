@@ -36,7 +36,7 @@ export const PilotProjectView = () => {
 
   return (
     <div className="relative w-full h-full">
-      <title> {"Magnify | " + name}</title>
+      <title>{"Pilot project | " + name}</title>
       {loading && (
         <div className="container max-w-full bg-white w-full h-full gap-10 z-50 justify-center items-center flex flex-col-reverse">
           <span className="sm:text-sm md:text-base lg:text-lg text-primary-color1 text-center">

@@ -45,7 +45,6 @@ function App() {
         <Route path="create-user" element={<UserData />} />
         <Route path="pilot-projects">
           <Route index element={<PilotProjects />} />
-          <Route path=":projectID" element={<PilotProjectView />} />
         </Route>
         <Route path=":clientID" element={<UserData />} />
         <Route path="project-upload-files" element={<UploadProjectFiles />} />

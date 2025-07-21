@@ -102,7 +102,9 @@ export const PilotProjects = () => {
           w-full p-5 shadow flex flex-col gap-4 overflow-y-auto "
         >
           {/* if no projects with same name */}
-          {!isLoading && error && !search && (
+          {isLoading || isRefetching ? (
+            <ProjectFolderSkeleton count={5} />
+          ) : error ? (
             <div className="flex w-full flex-col items-center justify-center py-2">
               <span>
                 {getText(
@@ -111,19 +113,7 @@ export const PilotProjects = () => {
                 )}
               </span>
             </div>
-          )}
-          {!isLoading && search.length > 0 && (
-            <div
-              className="flex w-full flex-col items-center justify-center py-2 overflow-y-auto
-                sm:text-sm md:text-md lg:text-base "
-            >
-              <span>
-                {getText("No results for", "لا توجد نتائج باسم")} {search}
-              </span>
-            </div>
-          )}
-          {(isLoading || isRefetching) && <ProjectFolderSkeleton count={3} />}
-          {(!isLoading || !isRefetching) && Projects?.length >= 1 && !error && (
+          ) : (
             <RenderPilotProjects
               search={search}
               Projects={Projects}

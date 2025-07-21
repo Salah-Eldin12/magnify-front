@@ -321,7 +321,6 @@ export default function EditProject() {
                   <span>{errorMsg}</span>
                 </div>
                 <SecondaryBtn
-                  loading={submiting}
                   disabled={submiting}
                   action={() => {
                     navigate(-1);
