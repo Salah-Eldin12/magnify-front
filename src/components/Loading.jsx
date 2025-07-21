@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Loading = () => {
   return (
     <div className="flex justify-center top-0 fixed z-50 items-center w-full h-full bg-white">

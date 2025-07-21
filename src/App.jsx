@@ -10,7 +10,6 @@ import Upload from "./pages/Upload files/Upload";
 import Logout from "./pages/Logout";
 import UploadPage from "./pages/Upload files/UploadPage";
 import EditProject from "./pages/Dashboard/EditProject";
-import SearchProject from "./pages/Dashboard/SearchProject";
 // Auth
 import SendReset from "./pages/Auth/sendResetPass";
 import CheckEmail from "./pages/Auth/checkEmail";
@@ -21,6 +20,9 @@ import CreatePass from "./pages/Auth/CreatePass";
 import SendVerifyEmail from "./pages/Auth/sendVerifyEmail";
 import Login from "./pages/Auth/Login";
 import { NotFoundDashboard } from "./pages/Dashboard/NotFoundDashboard";
+import { PilotProjects } from "./pages/Dashboard/Pilot Projects/PilotProjects";
+import UploadProjectFiles from "./pages/Dashboard/UploadProjectFiles";
+import { PilotProjectView } from "./pages/Dashboard/Pilot Projects/PilotProjectView";
 
 function App() {
   return (
@@ -41,8 +43,12 @@ function App() {
       <Route path="/dashboard">
         <Route index element={<Dashboard />} />
         <Route path="create-user" element={<UserData />} />
+        <Route path="pilot-projects">
+          <Route index element={<PilotProjects />} />
+          <Route path=":projectID" element={<PilotProjectView />} />
+        </Route>
         <Route path=":clientID" element={<UserData />} />
-        <Route path="project-upload-files" element={<SearchProject />} />
+        <Route path="project-upload-files" element={<UploadProjectFiles />} />
         <Route path=":clientID/project/:projectID" element={<EditProject />} />
         <Route path="not-found" element={<NotFoundDashboard />} />
       </Route>
@@ -59,6 +65,7 @@ function App() {
       <Route path="/upload-files" element={<Upload />} />
       <Route path="/upload-files/missing-photo" element={<UploadPage />} />
       <Route path="/upload-files/session-data" element={<UploadPage />} />
+      <Route path="/pilot-project/:name" element={<PilotProjectView />} />
     </Routes>
   );
 }

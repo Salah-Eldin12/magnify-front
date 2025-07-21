@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MainLayout from "../../Layout/MainLayout";
 import { useLang } from "../../context/LangContext";
 import { InputSearch } from "../../components/inputSearch";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { Project } from "../../components/Dashboard/Upload Project Folder/Project";
-import UploadFile from "../../components/Dashboard/Upload Project Folder/UploadFile";
 import cookie from "react-cookies";
 import ProjectFolderSkeleton from "../../components/Skeletons/ProjectFolderSkeleton";
 import { useUser } from "../../context/UserContext";
 import { NotFound } from "../../components/NotFound";
+import { DragDropUploader } from "../../components/DragDropUploader";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 const userCookies = cookie.load("user_token");
 const header = { headers: { token: `${userCookies}` } };
 
-export default function SearchProject() {
+export default function UploadProjectFiles() {
   const { lang } = useLang();
   const [search, setSearch] = useState("");
   const { user } = useUser();
@@ -69,6 +69,7 @@ export default function SearchProject() {
     />
   ));
 
+
   return (
     <MainLayout
       type="layout2"
@@ -81,10 +82,17 @@ export default function SearchProject() {
         id="content"
         className="flex min-h-fit h-full flex-col container max-w-[2000px] gap-3 items-center justify-start py-5"
       >
-        {upload.active && <UploadFile upload={upload} setUpload={setUpload} />}
+        {upload.active && (
+          <UploadProjecFiles
+            upload={upload}
+            setUpload={setUpload}
+            getText={getText}
+          />
+        )}
         <h2 className="sm:text-lg md:text-xl lg:text-2xl font-ligth text-primary-color1 capitalize">
           {getText("Search for project", "ابحث عن مشروع")}
         </h2>
+
         <div className="dropdown dropdown-open sm:!w-full md:!w-8/12 lg:!w-6/12 gap-2 !flex !flex-col">
           <InputSearch
             order={2}
@@ -107,7 +115,7 @@ export default function SearchProject() {
             w-full px-2 py-4 shadow flex flex-col gap-4 max-h-[450px]"
           >
             {isLoading || isRefetching ? (
-              <ProjectFolderSkeleton />
+              <ProjectFolderSkeleton count={5} />
             ) : (
               <div
                 id="projects"
@@ -140,3 +148,18 @@ export default function SearchProject() {
     </MainLayout>
   );
 }
+
+const UploadProjecFiles = ({ upload, setUpload, getText }) => {
+  return (
+    upload.active && (
+      <DragDropUploader
+        closePopUp={() => {
+          setUpload((prev) => ({ ...prev, active: false }));
+        }}
+        text={getText("Upload file", "رفع ملفات المشروع")}
+        project={upload}
+        uploadFor="project"
+      />
+    )
+  );
+};

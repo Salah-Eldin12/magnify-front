@@ -1,5 +1,4 @@
-import React from "react";
-import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import cookie from "react-cookies";
 import { useUser } from "../../context/UserContext";
 
@@ -18,7 +17,6 @@ const ProtectedRoutes = [
 
 const ProdectedRouterAuth = () => {
   const { user } = useUser();
-  let navigate = useNavigate();
 
   const route = useLocation().pathname.split("/", 2).join("/");
   // Check if the user is already logged in

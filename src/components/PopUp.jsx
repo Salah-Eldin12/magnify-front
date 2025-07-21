@@ -15,6 +15,7 @@ export const PopUp = ({
   icon,
   btnText,
   hidden,
+  loadingBtn,
 }) => {
   const [show, setShow] = useState(false);
   const { lang } = useLang();
@@ -73,10 +74,11 @@ export const PopUp = ({
             <SecondaryBtn
               text={btnText ? btnText : getText("Yes", "نعم")}
               action={yesAction}
+              loading={loadingBtn}
               type="button"
-              style="!py-3 md:!text-sm w-6/12 sm:!px-0 !min-w-fit
-              sm:!text-xs "
-              disabled={hidden}
+              style={`!py-3 md:!text-sm w-6/12 sm:!px-0 !min-w-fit
+              sm:!text-xs `}
+              disabled={hidden || loadingBtn}
             />
           </div>
         ) : (

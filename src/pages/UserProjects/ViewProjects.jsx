@@ -3,7 +3,6 @@ import { useLang } from "../../context/LangContext";
 import { Navigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import axios from "axios";
-import { Loading } from "../../components/Loading";
 import { useUser } from "../../context/UserContext";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
@@ -20,7 +19,7 @@ export default function ViewProjects() {
     ? `${owner}|${projectName}${date ? "|" + date : ""}`
     : `${userName}|${projectName}${date ? "|" + date : ""}`;
 
-  const { isLoading, isError, isRefetching } = useQuery(
+  const { isError } = useQuery(
     ["projectFolder", folder],
     () =>
       axios
@@ -28,8 +27,6 @@ export default function ViewProjects() {
         .then((res) => res.data),
     { retry: false, refetchOnWindowFocus: false }
   );
-
-  if (isLoading || isRefetching) return <Loading />;
 
   if (isError)
     return (

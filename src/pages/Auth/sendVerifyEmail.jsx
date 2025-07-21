@@ -19,12 +19,13 @@ export default function SendVerifyEmail() {
   const { id } = useParams();
   const { lang } = useLang();
   const [sending, setSending] = useState(false);
+  const [err, setErr] = useState();
+
   // Handle text based on language
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
   };
 
-  
   const {
     isLoading,
     isRefetching,
@@ -46,6 +47,7 @@ export default function SendVerifyEmail() {
   if (error) {
     return <NotFound />;
   }
+
   const { email } = user;
 
   return (
@@ -77,6 +79,11 @@ export default function SendVerifyEmail() {
               : "Verify your email address"}
           </h1>
         </div>
+        {err && (
+          <span className="text-error bg-errorContainer py-2 px-10 rounded-lg">
+            {err}
+          </span>
+        )}
         <div
           dir="ltr"
           className="text-primary-color1 font-normal text-center w-full
@@ -120,6 +127,8 @@ export default function SendVerifyEmail() {
               HandleSendVerify({
                 setSending,
                 email,
+                setErr,
+                lang,
               });
             }}
             loading={sending}

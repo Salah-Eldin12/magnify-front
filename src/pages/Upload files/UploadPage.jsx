@@ -159,7 +159,6 @@ export default function UploadPage() {
   });
   const pageName = location.includes("missing-photo");
 
-  console.log("uploaded", uploaded, "//////", "uploading", uploading);
 
   return (
     <MainLayout

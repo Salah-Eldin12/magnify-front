@@ -124,8 +124,12 @@ a:focus-visible,
   min-height: calc(100dvh - 150px);
 }
 
-#users-table {
-  height: calc(80dvh - 150px)
+#table {
+  height: calc(100dvh - 290px)
+}
+
+#user-projects-grid {
+  min-height: calc(100dvh - 250px)
 }
 
 #content.container {

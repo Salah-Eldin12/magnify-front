@@ -3,7 +3,7 @@ import MainLayout from "../../Layout/MainLayout";
 import ProjectInfo from "../../components/Dashboard/Projects";
 import { useLang } from "../../context/LangContext";
 import { Loading } from "../../components/Loading";
-import {  useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import cookie from "react-cookies";
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -47,7 +47,7 @@ export function UserData() {
   if (clientID && (isLoading || isRefetching)) {
     return <Loading />;
   }
-  if (!user.isAdmin) {
+  if (!user?.isAdmin) {
     return (
       <NotFoundDashboard
         message={getText(
@@ -89,8 +89,6 @@ export function UserData() {
 }
 
 const FormContainer = ({ clientData }) => {
-  const { lang } = useLang();
-
   return (
     <div
       id="content"

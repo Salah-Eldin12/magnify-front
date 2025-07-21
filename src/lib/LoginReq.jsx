@@ -5,7 +5,6 @@ const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 // login handle submit
 export const HandleEmailLogin = async ({
-  setUser,
   setLoading,
   values,
   setError,
@@ -17,21 +16,23 @@ export const HandleEmailLogin = async ({
       headers: { lang: `${lang}` },
     })
     .then((res) => {
-      const userLink = res.data.token;
+      const userToken = res.data.token;
       const userName = res.data.user.userName;
-      setUser(res.data.user);
       // // redirect to path
       if (res.data.user.verified) {
-        cookie.save("user_token", userLink, {
+        cookie.save("user_token", userToken, {
           path: "/",
           secure: true,
           maxAge: 36000,
         });
+        localStorage.setItem("auth", "logged-in");
         window.location.replace(
           res.data.user.isAdmin ? `/dashboard` : `/user/${userName}`
         );
       } else {
-        window.location.replace(`/verify-email/${userLink}`, { replace: true });
+        window.location.replace(`/verify-email/${userToken}`, {
+          replace: true,
+        });
       }
     })
     .catch((err) => {

@@ -212,7 +212,7 @@ export default function UserInfo({ clientData }) {
                 } 
                 ${msg.type === "error" ? "text-error" : "text-success"}
                 flex items-center gap-1  duration-300
-                sm:text-sm md:text-base`}
+                sm:text-xs md:text-base`}
               >
                 <MdErrorOutline />
                 {msg.msg}
@@ -222,7 +222,7 @@ export default function UserInfo({ clientData }) {
                 action={() => {
                   navigate(-1);
                 }}
-                style="!w-[180px] !bg-transparent border-darkGreen !text-primary-color2
+                style="sm:!hidden md:!flex !bg-transparent border-darkGreen !text-primary-color2
                               hover:!bg-darkGreen hover:!text-white"
                 text={getText("back", "رجوع")}
               />

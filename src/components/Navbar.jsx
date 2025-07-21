@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { useLang } from "../context/LangContext";
 import cookie from "react-cookies";
 /////// icons
@@ -6,12 +6,11 @@ import { GrLanguage } from "react-icons/gr";
 import { LuLogOut } from "react-icons/lu";
 
 const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
+const user = cookie.load("user_token");
 
 const Navbar = ({ setPopUp, logoStyle, type }) => {
   const { lang } = useLang();
 
-  // user cookies
-  const user = cookie.load("user_token");
   // handle logout
   const Logout = () => {
     setPopUp(true);
@@ -29,6 +28,7 @@ const Navbar = ({ setPopUp, logoStyle, type }) => {
   if (type === "logout") {
     return;
   }
+
   return (
     <header dir="ltr" className="w-full max-w-full static top-0 flex">
       {!user || type === "not-found" ? (
@@ -75,7 +75,7 @@ const Navbar = ({ setPopUp, logoStyle, type }) => {
             </button>
             <button
               id="focus-btn"
-              onClick={Logout}
+              onClick={() => Logout()}
               className="text-primary-color1 font-normal btn btn-sm border-none bg-lightGreen/70 flex items-center gap-1
           hover:bg-lightGreen duration-200"
             >

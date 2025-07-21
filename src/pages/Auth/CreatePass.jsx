@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "react-query";
@@ -9,7 +9,6 @@ import { NotFound } from "../../components/NotFound";
 import { Loading } from "../../components/Loading";
 import { PopUp } from "../../components/PopUp";
 import { GoDotFill } from "react-icons/go";
-import cookie from "react-cookies";
 import MainLayout from "../../Layout/MainLayout";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
@@ -77,9 +76,9 @@ export default function CreatePass() {
               "الذهاب الى صفحة تسجيل الدخول"
             )}
             iconImage={serverImagesPath + "/icon2.svg"}
-            
             action={() => {
               window.location.replace("/login?email=" + user.email);
+              window.localStorage.setItem("auth", "pass-reset");
             }}
           />
         )}

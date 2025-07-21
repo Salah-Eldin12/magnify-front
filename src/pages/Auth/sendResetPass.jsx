@@ -44,7 +44,7 @@ export default function SendReset() {
         initialValues={{ email: "" }}
         validationSchema={ResetPassSchema}
         onSubmit={(values) =>
-          HandleSendReset({ setSending, values, setErr, getText, lang })
+          HandleSendReset({ setSending, values, setErr, lang })
         }
       >
         {({ errors, touched, values, handleChange }) => (

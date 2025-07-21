@@ -1,43 +1,27 @@
-import { useEffect, useState } from "react";
-import {
-  Navigate,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 /////// components
 import { QR } from "../../components/Qr";
 import { useLang } from "../../context/LangContext";
 import { SecondaryLink } from "../../components/Btns";
-import { PopUp } from "../../components/PopUp";
-import { HandleDelete } from "../../lib/DashboardReq";
 import { InputSearch } from "../../components/inputSearch";
 import UsersTable from "../../components/Dashboard/UsersTable";
 /////// layout
 import MainLayout from "../../Layout/MainLayout";
 // icons
-import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
-import { NotFound } from "../../components/NotFound";
 import { useUser } from "../../context/UserContext";
 
 export function Dashboard() {
   const { lang } = useLang();
   const navigate = useNavigate();
-  const location = useLocation();
-  const [deleteUser, setDeleteUser] = useState({});
-  const [page, setPage] = useState(0);
-  const [searchParams, setSearchParams] = useSearchParams({ page: 0 });
   const [search, setSearch] = useState("");
-  const [popUp, setPopUp] = useState(false);
-  const [nextPage, setNextPage] = useState(false);
-
   const { user } = useUser();
 
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
   };
 
-  if (!user.isAdmin) {
+  if (!user?.isAdmin) {
     return (
       <Navigate
         to={"/unauthorized"}
@@ -48,45 +32,14 @@ export function Dashboard() {
     );
   }
 
-  // Helper function to set a specific parameter
-  const setPageParam = (page) => {
-    setPage(page);
-  };
-
   return (
     <MainLayout
       type="dashboard"
       pageTitle={getText("Admin Panel", "لوحة التحكم")}
     >
-      {popUp && (
-        <PopUp
-          iconImage="/assets/icon5.svg"
-          type="yes-no"
-          noAction={() => setPopUp(!popUp)}
-          yesAction={() => HandleDelete({ deleteUser, setPopUp })}
-        >
-          <div className="w-full text-center lowercase rounded-xl gap-4 flex flex-col relative">
-            <p>
-              <b>{user?.fname} </b>
-              {getText(
-                "Are you sure you want to delete",
-                "هل أنت متأكد أنك تريد الحذف ؟"
-              )}
-              <b className="mx-1">{deleteUser?.fname}</b>
-            </p>
-            <p className="text-base">
-              {getText(
-                "This action can’t be undone",
-                "لا يمكن التراجع عن هذا الإجراء"
-              )}
-            </p>
-          </div>
-        </PopUp>
-      )}
-
       <section
         id="content"
-        className="relative w-full !min-h-full flex flex-col items-center container gap-5 overflow-auto"
+        className="relative w-full justify-between flex flex-col items-center container gap-5 overflow-hidden"
       >
         <AdminTools
           fname={user.fname}
@@ -95,25 +48,8 @@ export function Dashboard() {
           search={search}
           setSearch={setSearch}
         />
-        {
-          <UsersTable
-            navigate={navigate}
-            lang={lang}
-            search={search}
-            setDeleteUser={setDeleteUser}
-            setPopUp={setPopUp}
-            page={page}
-            setNextPage={setNextPage}
-          />
-        }
-        {/* pagination */}
-        <Pagination
-          nextPage={nextPage}
-          page={page}
-          setPageParam={setPageParam}
-          searchParams={searchParams}
-          search={search}
-        />
+
+        <UsersTable search={search} />
         <QR bottom="bottom-14" />
       </section>
     </MainLayout>
@@ -131,13 +67,12 @@ const AdminTools = ({ fname, lang, setSearch, search }) => {
       className="w-full grid grid-flow-row-dense items-center place-content-between
     sm:grid-cols-2 sm:row-span-2 sm:gap-6
     md:row-span-1 md:grid-cols-2  md:gap-3 
-    lg:grid-cols-3 
-    xl:grid-cols-3"
+    lg:grid-cols-4 "
     >
       {/* admin name  */}
       <div
         id="top-header"
-        className="flex justify-between w-full items-center
+        className="flex justify-between w-full items-center gap-5
       sm:col-span-full  
       lg:col-span-2
       "
@@ -146,14 +81,16 @@ const AdminTools = ({ fname, lang, setSearch, search }) => {
           id="user-welcome"
           className={`${
             lang === "ar" && "flex-row"
-          } text-primary-color1 capitalize gap-2 font-semibold items-center justify-center w-full h-full
+          } text-primary-color1 capitalize font-semibold w-fit h-full
         place-content-center 
-        sm:text-md
-        md:text-base
+        sm:text-lg
+
         lg:text-xl`}
         >
-          {getText("Hello, ", " مرحبا, ")}
-          <span className="font-medium">{fname}</span>
+          <span className="font-medium text-nowrap">
+            {getText("Hello, ", " مرحبا, ")}
+            {fname}
+          </span>
         </h3>
         <InputSearch
           toggle={true}
@@ -165,9 +102,9 @@ const AdminTools = ({ fname, lang, setSearch, search }) => {
       </div>
       <div
         id="buttons-container"
-        className="flex gap-3 w-full items-center 
+        className="flex gap-3 w-full items-center flex-wrap
         sm:col-span-full sm:justify-between
-        lg:col-span-1 lg:justify-around "
+        lg:col-span-2 lg:justify-around "
       >
         <SecondaryLink
           text={getText("Create new user", "انشاء مستخدم")}
@@ -177,8 +114,8 @@ const AdminTools = ({ fname, lang, setSearch, search }) => {
           style="flex items-center gap-2 bg-primary-color3 border font-normal 
         hover:border-primary-color3
         sm:!min-w-[47%]
-        md:!min-w-[35%] 
-        lg:!min-w-[48%]
+        md:!min-w-[31%] 
+        lg:!min-w-[32%]
         "
         />
         <SecondaryLink
@@ -189,36 +126,21 @@ const AdminTools = ({ fname, lang, setSearch, search }) => {
           style="flex items-center gap-2 bg-primary-color3 border font-normal
         hover:border-primary-color3
           sm:!min-w-[47%]
-        md:!min-w-[35%]
-        lg:!min-w-[48%] "
+        md:!min-w-[31%]
+        lg:!min-w-[32%] "
+        />
+        <SecondaryLink
+          text={getText("Pilot Projects", "مشاريع تجريبية")}
+          linkTo="pilot-projects"
+          type="button"
+          name="create-user"
+          style="flex items-center gap-2 bg-primary-color3 border font-normal
+        hover:border-primary-color3
+          sm:!min-w-[47%]
+        md:!min-w-[31%]
+        lg:!min-w-[32%] "
         />
       </div>
     </div>
   );
 };
-
-const Pagination = ({ nextPage, page, setPageParam, searchParams, search }) => (
-  <div dir="ltr" className="join gap-3">
-    <button
-      disabled={page === 0 || search}
-      onClick={() => {
-        setPageParam(parseInt(page - 1));
-      }}
-      className="join-item text-primary-color2 disabled:text-primary-color2/50"
-    >
-      <SlArrowLeft size={15} />
-    </button>
-    <button className="join-item text-primary-color2 text-lg">
-      {page + 1}
-    </button>
-    <button
-      disabled={!nextPage || search}
-      onClick={() => {
-        setPageParam(parseInt(page + 1));
-      }}
-      className="join-item text-primary-color2 disabled:text-primary-color2/50"
-    >
-      <SlArrowRight size={15} />
-    </button>
-  </div>
-);

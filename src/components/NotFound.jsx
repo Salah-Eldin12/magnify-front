@@ -16,7 +16,7 @@ export function NotFound() {
 
   const err = location && location?.state?.err == "unauthorized" ? 401 : 404;
 
-  return userCookies ? (
+  return !userCookies ? (
     <Navigate to="/" replace />
   ) : (
     <MainLayout

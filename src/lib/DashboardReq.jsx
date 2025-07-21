@@ -6,7 +6,7 @@ const serverPath = import.meta.env.VITE_APP_API_BASE;
 
 const header = { headers: { token: `${userCookies}` } };
 
-///// User
+//////////  For User ///////////////
 
 // handle submit create new user
 const HandleSubmitCreate = async ({
@@ -41,7 +41,7 @@ const SubmitEditUser = async ({ values, setSubmiting, setMsg, lang }) => {
       headers: { token: `${userCookies}`, lang: `${lang}` },
     })
     .then((res) => {
-      setMsg({ active: true, msg: "Data saved", type: "success" });
+      setMsg({ active: true, msg: res.data.message, type: "success" });
       setTimeout(() => {
         setMsg((prev) => ({ ...prev, active: false }));
       }, 2000);
@@ -54,17 +54,17 @@ const SubmitEditUser = async ({ values, setSubmiting, setMsg, lang }) => {
     });
 };
 // delete user
-const HandleDelete = async ({ deleteUser, setPopUp }) => {
+const HandleDelete = async ({ deleteUser, setDeletePopUp, refetch }) => {
   await axios
     .delete(`${serverPath}user/delete-user/${deleteUser._id}`, header)
     .then(() => {
-      window.location.reload();
-      setPopUp(false);
+      setDeletePopUp({ active: false });
+      refetch();
     })
     .catch((err) => console.log(err));
 };
 
-///// Project
+////////// For Project ///////////////
 
 // handle create project
 const HandleCreateProject = async ({
@@ -267,8 +267,8 @@ const UploadProjectFolder = async ({
   file,
   setProgress,
   date,
-  setUpload,
   setUploading,
+  closePopUp,
 }) => {
   const formData = new FormData();
   formData.append("project-folder", file);
@@ -288,10 +288,68 @@ const UploadProjectFolder = async ({
     .then(() => {
       setUploading("done");
       setTimeout(() => {
-        setUpload((prev) => ({ ...prev, active: false }));
+        closePopUp();
       }, 500);
     })
     .catch((err) => console.log(err));
+};
+// handle upload pilot project files
+const UploadPilotProject = async ({
+  file,
+  setProgress,
+  setUploading,
+  closePopUp,
+  refetch,
+}) => {
+  const formData = new FormData();
+  formData.append("pilot-project-folder", file);
+
+  await axios
+    .post(`${serverPath}pilot_project/create-project`, formData, {
+      onUploadProgress: (e) => {
+        setProgress(parseInt((e.loaded / e.total) * 100));
+      },
+      headers: {
+        "Content-Type": "multipart/form-data",
+        token: `${userCookies}`,
+      },
+    })
+    .then(() => {
+      setUploading("done");
+      setTimeout(() => {
+        closePopUp();
+        refetch();
+      }, 500);
+    })
+    .catch((err) => console.log(err));
+};
+
+const DeletePilotProject = async ({
+  project,
+  setDeletePopUp,
+  deletePopUp,
+  refetch,
+  setDeleteLoading,
+}) => {
+  setDeleteLoading(true);
+
+  await axios
+    .delete(`${serverPath}pilot_project/${project}`, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        token: `${userCookies}`,
+      },
+    })
+    .then(() => {
+      setTimeout(() => {
+        refetch();
+      }, 500);
+    })
+    .catch((err) => {})
+    .finally(() => {
+      setDeletePopUp(!deletePopUp);
+      setDeleteLoading(false);
+    });
 };
 
 export {
@@ -305,4 +363,6 @@ export {
   HandleCreateProject,
   HandleEditProject,
   UploadProjectFolder,
+  UploadPilotProject,
+  DeletePilotProject,
 };

@@ -326,7 +326,8 @@ export default function EditProject() {
                   action={() => {
                     navigate(-1);
                   }}
-                  style="!w-[180px] !bg-transparent border-darkGreen !text-primary-color2
+                  style="!w-[180px] !bg-transparent border-darkGreen !text-primary-color2 
+                  sm:!hidden md:!flex
                   hover:!bg-darkGreen hover:!text-white"
                   text={getText("back", "رجوع")}
                 />

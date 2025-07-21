@@ -19,6 +19,7 @@ export default function CheckEmail() {
   const { id } = useParams();
   const { lang } = useLang();
   const [sending, setSending] = useState(false);
+  const [err, setErr] = useState();
   // Handle text based on language
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
@@ -76,6 +77,11 @@ export default function CheckEmail() {
             {getText("Check your email", "تحقق من بريدك الإلكتروني")}
           </h1>
         </div>
+        {err && (
+          <span className="text-error bg-errorContainer py-2 px-10 rounded-lg">
+            {err}
+          </span>
+        )}
         <p
           className="text-primary-color1 font-normal text-center
           lg:text-lg
@@ -117,15 +123,17 @@ export default function CheckEmail() {
                     HandleSendVerify({
                       setSending,
                       email,
-                      getText,
+                      lang,
+                      setErr,
                     });
                   }
                 : (e) => {
                     e.preventDefault();
                     HandleSendReset({
                       setSending,
-                      email,
-                      getText,
+                      userEmail: email,
+                      lang,
+                      setErr,
                     });
                   }
             }

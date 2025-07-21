@@ -23,7 +23,7 @@ export const InputSearch = ({
     <div
       id="input-search-container"
       dir={langDir}
-      className={`flex items-centerjustify-end w-full !${containerStyle}\
+      className={`flex items-center justify-end w-full !${containerStyle}\
       sm:col-span-1
      lg:col-span-1
      xl:col-span-5 `}

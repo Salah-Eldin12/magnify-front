@@ -33,7 +33,7 @@ export default function FetchProject({ setProjectShowDates, user, projectID }) {
   );
 
   if (isLoading || isRefetching) {
-    return <ProjectSkeleton />;
+    return <ProjectSkeleton  />;
   }
 
   if (error) {

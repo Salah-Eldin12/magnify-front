@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 /////// components
 import { useLang } from "../../context/LangContext";
-import { NotFound } from "../../components/NotFound";
 import { NotFoundInList } from "../../components/NotFoundInList";
 import { QR } from "../../components/Qr";
 import { InputSearch } from "../../components/inputSearch";
@@ -14,6 +13,7 @@ import MainLayout from "../../Layout/MainLayout";
 /////// icons
 import { PopUp } from "../../components/PopUp";
 import { useUser } from "../../context/UserContext";
+import { FaBuildingCircleXmark } from "react-icons/fa6";
 
 export default function UserProjects() {
   const { lang } = useLang();
@@ -28,7 +28,7 @@ export default function UserProjects() {
     return lang === "en" || !lang ? enText : arText;
   };
 
-  if (userName !== user?.userName || !user?._id) {
+  if (userName !== user?.userName) {
     return (
       <Navigate
         to={"/unauthorized"}
@@ -57,8 +57,7 @@ export default function UserProjects() {
     >
       <section
         id="content"
-        className={`relative w-full flex flex-col items-center container max-w-[2000px] gap-8 py-4 overflow-hidden
-        ${user?.projectsData?.length >= 4 && ""}`}
+        className={`relative w-full flex flex-col items-center container max-w-[2000px] gap-8 py-4 overflow-hidden`}
       >
         {/* search by name */}
         <div className="grid sm:grid-cols-2 xl:grid-cols-7 justify-between items-center w-full border-b border-seconder-color1 pb-3">
@@ -80,15 +79,40 @@ export default function UserProjects() {
             onChangeHandle={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="flex flex-col gap-8 w-full max-w-[2000px] h-full ">
-          {/* no user found */}
-          {filteredProjects.length < 1 ? (
+        <div
+          id="user-projects-grid"
+          className="flex gap-8 w-full h-5/6 items-stretch justify-stretch "
+        >
+          {/* no project added */}
+          {user?.projectsData.length === 0 && !search && (
             <NotFoundInList
               color="#497B62"
-              text={getText("No project found", "لا يوجد مشروع بهذا الاسم")}
+              icon={
+                <FaBuildingCircleXmark
+                  color="#497B62"
+                  className="lg:text-8xl md:text-5xl sm:text-4xl"
+                />
+              }
+              text={
+                `${getText(
+                  "No project added yet ",
+                  "لا يوجد مشاريع في الوقت الحالي "
+                )}` + search
+              }
               textStyle="text-primary-color1"
             />
-          ) : (
+          )}
+          {/* searched project not found */}
+          {filteredProjects.length === 0 && search && (
+            <NotFoundInList
+              color="#497B62"
+              text={
+                `${getText("No result for ", " لا يوجد نتائج باسم ")}` + search
+              }
+              textStyle="text-primary-color1"
+            />
+          )}
+          {filteredProjects.length >= 1 && (
             <div
               id="projects"
               className="w-full gap-10 grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 place-items-center items-center 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { HandleEmailLogin } from "../../lib/LoginReq";
 import { useLang } from "../../context/LangContext";
@@ -7,7 +7,6 @@ import MainLayout from "../../Layout/MainLayout";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import { InputContainer } from "../../components/InputContainer";
-import { useUser } from "../../context/UserContext";
 
 const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
 
@@ -34,7 +33,6 @@ const Login = () => {
 const FormContainer = ({ lang, QREmail }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { user, setUser } = useUser();
   // Handle text based on language
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
@@ -85,7 +83,6 @@ const FormContainer = ({ lang, QREmail }) => {
         validationSchema={LoginSchema}
         onSubmit={(values) =>
           HandleEmailLogin({
-            setUser,
             setLoading,
             values,
             setError,

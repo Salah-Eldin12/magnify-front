@@ -14,7 +14,7 @@ function MainLayout({ children, type, pageTitle }) {
     <section
       dir={langDir}
       id={type}
-      className={`w-full relative bg-white grid  gap-3 content-between place-items-center
+      className={`w-full  relative bg-white grid  gap-3 content-between place-items-center
     min-h-fit h-full overflow-hidden bg-no-repeat
     bg-cover bg-center overflow-y-auto
       ${lang === "en" ? "font-['Montserrat'] " : "font-['Cairo']"} `}
