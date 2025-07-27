@@ -13,14 +13,14 @@ export const PilotProjectView = () => {
   const [loading, setLoading] = useState(true);
 
   // check if project exist
-  const { isError } = useQuery(
+  const { error } = useQuery(
     ["pilotProject", name],
     () =>
       axios.get(`${serverPath}pilot_project/${name}`).then((res) => res.data),
     { retry: false, refetchOnWindowFocus: false }
   );
 
-  if (isError)
+  if (error)
     return (
       <Navigate
         to={"/no-project-found"}

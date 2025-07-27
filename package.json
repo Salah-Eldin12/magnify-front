@@ -1,30 +1,32 @@
 {
   "name": "magnify",
   "version": "1.0.2",
+  "type": "module",
   "dependencies": {
     "@babel/core": "^7.28.0",
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-react": "^7.27.1",
     "@babel/register": "^7.27.1",
-    "@vitejs/plugin-react": "^4.6.0",
-    "@vitejs/plugin-react-swc": "^3.10.2",
+    "@tailwindcss/vite": "^4.1.11",
+    "@vitejs/plugin-react": "^4.7.0",
+    "@vitejs/plugin-react-swc": "^3.11.0",
     "axios": "^1.10.0",
     "express": "^5.1.0",
     "formik": "^2.4.6",
     "qrcode": "^1.5.4",
-    "react": "^19.1.0",
+    "react": "^18.3.1",
     "react-circular-progressbar": "^2.2.0",
     "react-cookies": "^0.1.1",
-    "react-dom": "^19.1.0",
+    "react-dom": "^18.3.1",
     "react-drag-drop-files": "^3.0.1",
     "react-icons": "^5.5.0",
     "react-lazy-load-image-component": "^1.6.3",
     "react-phone-input-2": "^2.15.1",
     "react-qr-code": "^2.0.18",
     "react-query": "^3.39.3",
-    "react-router-dom": "^7.6.3",
+    "react-router-dom": "^7.7.0",
     "save-svg-as-png": "^1.4.17",
-    "vite": "^7.0.4",
+    "vite": "^7.0.5",
     "vite-plugin-svgr": "^4.3.0",
     "vite-tsconfig-paths": "^5.1.4",
     "web-vitals": "^5.0.3",
@@ -54,10 +56,10 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.21",
     "cross-env": "^7.0.3",
-    "daisyui": "^5.0.46",
-    "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.11"
+    "daisyui": "^4.12.23",
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.38",
+    "autoprefixer": "^10.4.19"
   }
 }

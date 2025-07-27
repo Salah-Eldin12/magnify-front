@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createContext, use, useEffect } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { useQuery } from "react-query";
 import { Loading } from "../components/Loading";
 import { NotFound } from "../components/NotFound";
@@ -70,6 +70,6 @@ const UserProvider = ({ children }) => {
   );
 };
 
-const useUser = () => use(UserContext);
+const useUser = () => useContext(UserContext);
 
 export { UserProvider, useUser };

@@ -1,8 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
-module.exports = {
+export default {
   content: ["./src/**/**/**/*.{js,jsx}"],
-
   theme: {
     extend: {
       fontSize: {
@@ -57,6 +56,7 @@ module.exports = {
     },
   },
   plugins: [require("daisyui")],
-
-  daisyui: { themes: ["light"], base: false },
+  daisyui: {
+    themes: ["light"],
+  },
 };
