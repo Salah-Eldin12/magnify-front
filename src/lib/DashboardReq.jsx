@@ -54,11 +54,17 @@ const SubmitEditUser = async ({ values, setSubmiting, setMsg, lang }) => {
     });
 };
 // delete user
-const HandleDelete = async ({ deleteUser, setDeletePopUp, refetch }) => {
+const HandleDelete = async ({
+  deleteUser,
+  setDeletePopUp,
+  refetch,
+  setSearch,
+}) => {
   await axios
     .delete(`${serverPath}user/delete-user/${deleteUser._id}`, header)
     .then(() => {
       setDeletePopUp({ active: false });
+      setSearch("");
       refetch();
     })
     .catch((err) => console.log(err));

@@ -19,7 +19,7 @@ import { FaUserSlash } from "react-icons/fa6";
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 const axiosHeader = { headers: { token: `${cookie.load("user_token")}` } };
 
-const UsersTable = ({ search }) => {
+const UsersTable = ({ search, setSearch }) => {
   const [sort, setSort] = useState({ type: "" });
   const [page, setPage] = useState(1);
   const [deletePopUp, setDeletePopUp] = useState({ active: false, user: "" });
@@ -123,6 +123,7 @@ const UsersTable = ({ search }) => {
                 deleteUser: deletePopUp.user,
                 setDeletePopUp,
                 refetch,
+                setSearch,
               })
             }
           >

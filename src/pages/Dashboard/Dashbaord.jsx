@@ -49,7 +49,7 @@ export function Dashboard() {
           setSearch={setSearch}
         />
 
-        <UsersTable search={search} />
+        <UsersTable search={search} setSearch={setSearch} />
         <QR bottom="bottom-14" />
       </section>
     </MainLayout>

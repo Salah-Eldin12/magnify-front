@@ -19,8 +19,9 @@ export const PilotProjectView = () => {
       axios.get(`${serverPath}pilot_project/${name}`).then((res) => res.data),
     { retry: false, refetchOnWindowFocus: false }
   );
+  console.log(error);
 
-  if (error)
+  if (error?.status === 404)
     return (
       <Navigate
         to={"/no-project-found"}
