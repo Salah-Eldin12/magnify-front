@@ -4,6 +4,7 @@ import cookie from "react-cookies";
 /////// icons
 import { GrLanguage } from "react-icons/gr";
 import { LuLogOut } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
 const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
 const user = cookie.load("user_token");
@@ -38,11 +39,13 @@ const Navbar = ({ setPopUp, logoStyle, type }) => {
           } items-center w-full `}
         >
           {logoStyle && (
-            <img
-              src={serverImagesPath + "logo/mainLogo2.svg"}
-              alt="magnify-logo"
-              className={` sm:w-[90px] md:w-[110px] lg:w-[130px]`}
-            />
+            <Link to="/">
+              <img
+                src={serverImagesPath + "logo/mainLogo2.svg"}
+                alt="magnify-logo"
+                className={` sm:w-[90px] md:w-[110px] lg:w-[130px]`}
+              />
+            </Link>
           )}
           <button
             onClick={handleChangeLang}
@@ -55,11 +58,13 @@ const Navbar = ({ setPopUp, logoStyle, type }) => {
         </nav>
       ) : (
         <nav className="items-center flex justify-between sticky w-full max-w-full bg-primary-color1 container  py-3 top-0  ">
-          <img
-            src={serverImagesPath + "/logo/mainLogo.svg"}
-            alt="magnify-logo"
-            className="sm:w-[90px] md:w-[110px]"
-          />
+          <Link to="/">
+            <img
+              src={serverImagesPath + "/logo/mainLogo.svg"}
+              alt="magnify-logo"
+              className="sm:w-[90px] md:w-[110px]"
+            />
+          </Link>
           <div
             className="flex justify-center items-center   
       md:gap-5

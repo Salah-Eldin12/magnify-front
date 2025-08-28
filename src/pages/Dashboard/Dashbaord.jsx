@@ -122,7 +122,7 @@ const AdminTools = ({ fname, lang, setSearch, search }) => {
           text={getText("Upload files", "رفع ملفات")}
           linkTo="project-upload-files"
           type="button"
-          name="create-user"
+          name="upload-files"
           style="flex items-center gap-2 bg-primary-color3 border font-normal
         hover:border-primary-color3
           sm:!min-w-[47%]
@@ -133,7 +133,7 @@ const AdminTools = ({ fname, lang, setSearch, search }) => {
           text={getText("Pilot Projects", "مشاريع تجريبية")}
           linkTo="pilot-projects"
           type="button"
-          name="create-user"
+          name="pilot-projects"
           style="flex items-center gap-2 bg-primary-color3 border font-normal
         hover:border-primary-color3
           sm:!min-w-[47%]

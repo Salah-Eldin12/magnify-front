@@ -22,6 +22,7 @@ const axiosHeader = { headers: { token: `${cookie.load("user_token")}` } };
 const UsersTable = ({ search, setSearch }) => {
   const [sort, setSort] = useState({ type: "" });
   const [page, setPage] = useState(1);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [deletePopUp, setDeletePopUp] = useState({ active: false, user: "" });
   const { user } = useUser();
   const { lang } = useLang();
@@ -44,6 +45,7 @@ const UsersTable = ({ search, setSearch }) => {
     {
       retry: false,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
       keepPreviousData: true,
     }
   );
@@ -118,12 +120,14 @@ const UsersTable = ({ search, setSearch }) => {
             iconImage="/assets/icon5.svg"
             type="yes-no"
             noAction={() => setDeletePopUp(!deletePopUp)}
+            loadingBtn={deleteLoading}
             yesAction={() =>
               HandleDelete({
                 deleteUser: deletePopUp.user,
                 setDeletePopUp,
                 refetch,
                 setSearch,
+                setDeleteLoading,
               })
             }
           >

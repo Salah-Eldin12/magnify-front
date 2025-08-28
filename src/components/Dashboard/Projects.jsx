@@ -12,6 +12,7 @@ import { MdOutlineModeEditOutline } from "react-icons/md";
 import { RiAddCircleFill, RiDeleteBin6Line } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import { PopUp } from "../PopUp";
+import { useQueryClient } from "react-query";
 
 export default function ProjectInfo({ clientData }) {
   const [projectInfo, setProjectInfo] = useState([]);
@@ -20,6 +21,7 @@ export default function ProjectInfo({ clientData }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [popUp, setPopUp] = useState(false);
+  const queryClient = useQueryClient();
 
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
@@ -36,10 +38,10 @@ export default function ProjectInfo({ clientData }) {
       {loading && (
         <div
           id="loading"
-          className="fixed z-50 flex top-0 left-0 w-full h-full bg-black/90 flex-col justify-center items-center text-white"
+          className="fixed z-50 flex top-0 left-0 w-full h-dvh bg-primary-color2/90 flex-col justify-center items-center text-white"
         >
-          <span className="loading loading-infinity w-20" />
-          <span className="text-lg">
+          <span className="loading loading-infinity w-40 text-primary-color4" />
+          <span className="text-lg text-primary-color4 font-medium">
             {getText("Creating project", "جاري انشاء المشروع")}
           </span>
         </div>
@@ -118,11 +120,12 @@ export default function ProjectInfo({ clientData }) {
                       <>
                         <Link
                           to={`project/${project._id}`}
+                          state={{ userID: clientData.userName }}
                           id="edit-project"
                           title="Edit"
                           className="btn bg-primary-color3 btn-sm border-none text-white"
                         >
-                          <MdOutlineModeEditOutline title="edit" size={22} />
+                          <MdOutlineModeEditOutline size={22} />
                         </Link>
                       </>
                     )}
@@ -157,6 +160,7 @@ export default function ProjectInfo({ clientData }) {
                 projectInfo,
                 clientData,
                 navigate,
+                queryClient,
               })
             }
             className="h-[205px] w-full rounded-2xl border-2 flex flex-col gap-5 bg-primary-color1 text-white items-center justify-center

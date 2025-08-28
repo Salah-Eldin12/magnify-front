@@ -44,7 +44,7 @@ export const PilotProjects = () => {
     data: Projects,
     refetch,
   } = useQuery(
-    "fetchPilotProjects",
+    ["fetchPilotProjects"],
     () =>
       axios
         .get(`${serverPath}pilot_project`, {

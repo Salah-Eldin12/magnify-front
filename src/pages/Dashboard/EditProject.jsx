@@ -5,8 +5,8 @@ import { useLang } from "../../context/LangContext.jsx";
 import { InputContainer } from "../../components/InputContainer.jsx";
 import { SecondaryBtn } from "../../components/Btns.jsx";
 import UploadProjectImg from "../../components/UploadProjectImg.jsx";
-import { useQuery } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "react-query";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Loading } from "../../components/Loading.jsx";
 import { NotFound } from "../../components/NotFound.jsx";
 import * as Yup from "yup";
@@ -20,6 +20,7 @@ import {
 import { FaCheck } from "react-icons/fa";
 import cookie from "react-cookies";
 import { useUser } from "../../context/UserContext.jsx";
+import LoadingProjectData from "../../components/Dashboard/LoadingProjectData.jsx";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 const userCookies = cookie.load("user_token");
@@ -28,8 +29,11 @@ const header = { headers: { token: `${userCookies}` } };
 export default function EditProject() {
   const { lang } = useLang();
   const { projectID } = useParams();
+  const location = useLocation();
+  const { userID } = location.state || {};
   const { user } = useUser();
   const [errorMsg, setErrorMsg] = useState("");
+  const queryClient = useQueryClient();
 
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
@@ -48,7 +52,7 @@ export default function EditProject() {
     isRefetching,
     data: projectData,
   } = useQuery(
-    "fetchProject",
+    ["fetchProject"],
     () =>
       axios
         .get(`${serverPath}project/${projectID}`, header)
@@ -60,7 +64,7 @@ export default function EditProject() {
   );
 
   if (isLoading || isRefetching) {
-    return <Loading />;
+    return <LoadingProjectData />;
   }
   if (error || !user.isAdmin) {
     return (
@@ -125,6 +129,7 @@ export default function EditProject() {
           navigate,
           setErrorMsg,
           lang,
+          queryClient,
         });
       }}
     >
@@ -323,12 +328,13 @@ export default function EditProject() {
                 <SecondaryBtn
                   disabled={submiting}
                   action={() => {
-                    navigate(-1);
+                    navigate(`/dashboard/${userID}`);
                   }}
                   style="!w-[180px] !bg-transparent border-darkGreen !text-primary-color2 
                   sm:!hidden md:!flex
                   hover:!bg-darkGreen hover:!text-white"
                   text={getText("back", "رجوع")}
+                  type="button"
                 />
                 <SecondaryBtn
                   loading={submiting}
@@ -590,8 +596,8 @@ const EmailField = ({
         <div
           className={`absolute top-[20%] h-full items-center flex gap-2 
             sm:text-md md:text-base lg:text-lg ${loading && "opacity-40"} ${
-            lang === "ar" ? "left-4" : "right-4"
-          } `}
+              lang === "ar" ? "left-4" : "right-4"
+            } `}
         >
           {loading ? (
             <span className="loading loading-spinner loading-md text-primary-color2" />

@@ -15,15 +15,27 @@ const HandleSubmitCreate = async ({
   setSubmiting,
   setMsg,
   lang,
+  queryClient,
 }) => {
-  "use server";
-  setSubmiting((prev) => !prev);
+  setSubmiting(true);
   await axios
-    .post(`${serverPath}auth/create-user`, values, {
-      headers: { token: `${userCookies}`, lang: `${lang}` },
-    })
+    .post(
+      `${serverPath}auth/create-user`,
+      {
+        ...values,
+        emailType: "userCreated",
+      },
+      {
+        headers: { token: `${userCookies}`, lang: `${lang}` },
+      }
+    )
     .then((res) => {
-      navigate(`/dashboard/${res.data.userName}`, { replace: true });
+      const userData = res.data.data;
+      navigate(`/dashboard/${userData.userName}`, { replace: true });
+      queryClient.invalidateQueries({
+        queryKey: ["fetchClients"],
+        exact: false,
+      });
     })
     .catch((err) => {
       setMsg({ active: true, msg: err.response.data.message, type: "error" });
@@ -33,8 +45,14 @@ const HandleSubmitCreate = async ({
     });
 };
 // handle submit edit user
-const SubmitEditUser = async ({ values, setSubmiting, setMsg, lang }) => {
-  setSubmiting((prev) => !prev);
+const SubmitEditUser = async ({
+  values,
+  setSubmiting,
+  setMsg,
+  lang,
+  queryClient,
+}) => {
+  setSubmiting(true);
 
   await axios
     .put(`${serverPath}user/update-user/${values.userName}`, values, {
@@ -42,15 +60,21 @@ const SubmitEditUser = async ({ values, setSubmiting, setMsg, lang }) => {
     })
     .then((res) => {
       setMsg({ active: true, msg: res.data.message, type: "success" });
+      queryClient.refetchQueries({ queryKey: ["fetchClients"], exact: false });
+      queryClient.invalidateQueries({
+        queryKey: ["fetchClientEdit"],
+        exact: false,
+      });
+
       setTimeout(() => {
         setMsg((prev) => ({ ...prev, active: false }));
-      }, 2000);
+      }, 500);
     })
-    .catch((err) =>
-      setMsg({ active: true, msg: err.response.data.message, type: "error" })
-    )
+    .catch((err) => {
+      setMsg({ active: true, msg: err.response.data.message, type: "error" });
+    })
     .finally(() => {
-      setSubmiting((prev) => !prev);
+      setSubmiting(false);
     });
 };
 // delete user
@@ -59,15 +83,21 @@ const HandleDelete = async ({
   setDeletePopUp,
   refetch,
   setSearch,
+  setDeleteLoading,
 }) => {
+  setDeleteLoading(true);
+
   await axios
     .delete(`${serverPath}user/delete-user/${deleteUser._id}`, header)
     .then(() => {
-      setDeletePopUp({ active: false });
       setSearch("");
       refetch();
+      setDeletePopUp({ active: false });
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err))
+    .finally(() => {
+      setDeleteLoading(false);
+    });
 };
 
 ////////// For Project ///////////////
@@ -78,19 +108,27 @@ const HandleCreateProject = async ({
   clientData,
   navigate,
   projectInfo,
+  queryClient,
 }) => {
   setLoading((prev) => !prev);
   await axios
     .post(
       `${serverPath}project/${clientData._id}`,
       {
-        name: `projectName${projectInfo.length + 1}`,
+        name: `${clientData.userName}-project-${projectInfo.length + 1}`,
         number: `${projectInfo.length + 1}`,
       },
       header
     )
     .then((res) => {
-      navigate(`project/${res.data.project._id}`);
+      navigate(`project/${res.data.project._id}`, {
+        state: { userID: clientData.userName },
+      });
+      queryClient.refetchQueries({ queryKey: ["fetchClients"], exact: false });
+      queryClient.invalidateQueries({
+        queryKey: ["fetchClientEdit"],
+        exact: false,
+      });
     })
     .finally(() => setLoading(false));
 };
@@ -101,6 +139,7 @@ const HandleEditProject = async ({
   navigate,
   setErrorMsg,
   lang,
+  queryClient,
 }) => {
   setSubmiting((prev) => !prev);
 
@@ -109,6 +148,14 @@ const HandleEditProject = async ({
       headers: { token: `${userCookies}`, lang: `${lang}` },
     })
     .then(() => {
+      queryClient.refetchQueries({
+        queryKey: ["fetchClientEdit"],
+        exact: false,
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["fetchProject"],
+        exact: false,
+      });
       navigate(-1);
     })
     .catch((err) => setErrorMsg(err.response.data.message))

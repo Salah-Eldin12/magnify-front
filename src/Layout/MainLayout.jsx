@@ -10,6 +10,9 @@ function MainLayout({ children, type, pageTitle }) {
   const { lang } = useLang();
   const langDir = lang === "ar" ? "rtl" : "ltr";
 
+  const getText = (enText, arText) => {
+    return lang === "en" || !lang ? enText : arText;
+  };
   return (
     <section
       dir={langDir}
@@ -25,11 +28,10 @@ function MainLayout({ children, type, pageTitle }) {
         <PopUp
           setPopUp={setPopUp}
           iconImage={icon3}
-          text={
-            lang === "ar"
-              ? "هل أنت متأكد أنك تريد تسجيل الخروج"
-              : "Are you sure you want to log out?"
-          }
+          text={getText(
+            "Are you sure you want to log out?",
+            "هل أنت متأكد أنك تريد تسجيل الخروج"
+          )}
           type="yes-no"
           noAction={() => setPopUp(!popUp)}
           yesAction={() => {

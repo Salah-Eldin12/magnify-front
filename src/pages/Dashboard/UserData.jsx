@@ -2,13 +2,13 @@ import UserInfo from "../../components/Dashboard/UserInfo";
 import MainLayout from "../../Layout/MainLayout";
 import ProjectInfo from "../../components/Dashboard/Projects";
 import { useLang } from "../../context/LangContext";
-import { Loading } from "../../components/Loading";
 import { useParams } from "react-router-dom";
 import cookie from "react-cookies";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { useUser } from "../../context/UserContext";
 import { NotFoundDashboard } from "./NotFoundDashboard";
+import LoadingUserData from "../../components/Dashboard/LoadingUserData";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 const userCookies = cookie.load("user_token");
@@ -25,12 +25,11 @@ export function UserData() {
   const {
     error,
     isLoading,
-    isRefetching,
     data: clientData,
+    isRefetching,
   } = useQuery(
-    ["fetchClientEdit", { clientID, projectID }],
+    ["fetchClientEdit", clientID, projectID],
     () =>
-      clientID &&
       axios
         .get(`${serverPath}user/client/${clientID}`, {
           headers: {
@@ -39,14 +38,44 @@ export function UserData() {
         })
         .then((res) => res.data),
     {
+      enabled: !!clientID,
       retry: false,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 
-  if (clientID && (isLoading || isRefetching)) {
-    return <Loading />;
+  if (clientID) {
+    if (isLoading) {
+      return (
+        <MainLayout pageTitle={getText("User Data Loading")}>
+          <LoadingUserData
+            textUser={getText(
+              "fetching User Data",
+              " جاري تحميل بيانات المستخدم "
+            )}
+            textProject={getText(
+              "project Data ",
+              " جاري تحميل بيانات المشاريع"
+            )}
+          />
+        </MainLayout>
+      );
+    } else if (isRefetching) {
+      return (
+        <MainLayout pageTitle={getText("User Data Loading")}>
+          <LoadingUserData
+            textUser={getText("Saving User Data", " جاري حفظ بيانات المستخدم ")}
+            textProject={getText(
+              "Saving project Data ",
+              "جاري حفظ بيانات المشاريع"
+            )}
+          />
+        </MainLayout>
+      );
+    }
   }
+
   if (!user?.isAdmin) {
     return (
       <NotFoundDashboard
@@ -73,7 +102,6 @@ export function UserData() {
 
   return (
     <MainLayout
-      type="layout2"
       pageTitle={
         clientData
           ? getText(

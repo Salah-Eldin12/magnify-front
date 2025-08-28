@@ -7,16 +7,17 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { MdErrorOutline } from "react-icons/md";
+import { useQueryClient } from "react-query";
 
 export default function UserInfo({ clientData }) {
   const { lang } = useLang();
-  const langDir = lang === "ar" ? "rtl" : "ltr";
   const [submiting, setSubmiting] = useState(false);
   const [msg, setMsg] = useState({ active: false, msg: "", type: "" });
 
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
   };
+  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
 
@@ -97,6 +98,7 @@ export default function UserInfo({ clientData }) {
                 setSubmiting,
                 setMsg,
                 lang,
+                queryClient,
               });
             }
           : (values) => {
@@ -106,6 +108,7 @@ export default function UserInfo({ clientData }) {
                 setSubmiting,
                 setMsg,
                 lang,
+                queryClient,
               });
             }
       }
@@ -165,10 +168,8 @@ export default function UserInfo({ clientData }) {
           <Form
             id="user-info"
             className="w-full flex flex-col gap-5 p-4 rounded-lg shadow-lg"
-            dir={langDir}
           >
             <h2
-              dir={langDir}
               className="text-primary-color1 capitalize font-semibold
             md:text-xl
             sm:text-lg"
@@ -220,7 +221,7 @@ export default function UserInfo({ clientData }) {
               <SecondaryBtn
                 type={"button"}
                 action={() => {
-                  navigate(-1);
+                  navigate("/dashboard");
                 }}
                 style="sm:!hidden md:!flex !bg-transparent border-darkGreen !text-primary-color2
                               hover:!bg-darkGreen hover:!text-white"
@@ -237,8 +238,8 @@ export default function UserInfo({ clientData }) {
                       ? "save data"
                       : "حفط"
                     : lang === "en"
-                    ? "create user"
-                    : "انشاء مستخدم"
+                      ? "create user"
+                      : "انشاء مستخدم"
                 }
                 style="self-end"
               />

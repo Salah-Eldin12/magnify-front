@@ -30,11 +30,9 @@ export const InputContainer = ({
 }) => {
   const { lang } = useLang();
   const [showPass, setShowPass] = useState(false);
-  const langDir = lang === "ar" ? "rtl" : "ltr";
 
   return (
     <div
-      dir={langDir}
       className={`${containerStyle} max-w-[400px] text-lightGreen w-full font-medium flex items-center gap-1 
       flex-col sm:!text-sm md:!text-md `}
     >
