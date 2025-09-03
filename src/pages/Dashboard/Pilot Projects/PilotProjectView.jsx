@@ -19,7 +19,6 @@ export const PilotProjectView = () => {
       axios.get(`${serverPath}pilot_project/${name}`).then((res) => res.data),
     { retry: false, refetchOnWindowFocus: false }
   );
-  console.log(error);
 
   if (error?.status === 404)
     return (
@@ -40,14 +39,14 @@ export const PilotProjectView = () => {
       <title>{"Pilot project | " + name}</title>
       {loading && (
         <div className="container max-w-full bg-white w-full h-full gap-10 z-50 justify-center items-center flex flex-col-reverse">
-          <span className="sm:text-sm md:text-base lg:text-lg text-primary-color1 text-center">
+          <span className="sm:text-sm md:text-base text-primary-color1 text-center">
             {getText(
               "We are preparing your project, Please wait",
               "مشروعك قيد التجهيز, برجاء الانتظار"
             )}
           </span>
           <video
-            className="sm:w-[50%] md:w-[40%] lg:w-[20%]"
+            className="sm:w-[50%] md:w-[40%] lg:w-[25%]"
             autoPlay
             playsInline
             muted

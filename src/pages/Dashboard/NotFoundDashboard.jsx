@@ -1,7 +1,8 @@
 import { useLang } from "../../context/LangContext";
 import MainLayout from "../../Layout/MainLayout";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaUserLargeSlash } from "react-icons/fa6";
+import { BgIcon } from "../../icons/BgIcon";
 
 export function NotFoundDashboard({ message, message1 }) {
   const { lang } = useLang();
@@ -11,7 +12,8 @@ export function NotFoundDashboard({ message, message1 }) {
 
   return (
     <MainLayout type="not-found" pageTitle={getText(`Error 404`, `خطا 404`)}>
-      <section className="h-full w-full flex justify-center items-center flex-col gap-5 container max-w-full">
+      <BgIcon className="absolute z-0 top-0 left-0 w-full h-dvh " />
+      <section className="h-full w-full flex justify-center items-center flex-col gap-5 container max-w-full relative">
         <FaUserLargeSlash className="text-primary-color1 sm:text-[100px] md:text-[120px] lg:text-[180px]" />
         <div className="flex flex-col justify-center items-center gap-4">
           <h5

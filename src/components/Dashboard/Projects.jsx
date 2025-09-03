@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useLang } from "../../context/LangContext";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/opacity.css";
 // components
 import {
   HandleCreateProject,
@@ -10,19 +8,19 @@ import {
 // icons
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import { RiAddCircleFill, RiDeleteBin6Line } from "react-icons/ri";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PopUp } from "../PopUp";
 import { useQueryClient } from "react-query";
+import { DeleteIcon } from "../../icons/DeleteIcon";
 
 export default function ProjectInfo({ clientData }) {
   const [projectInfo, setProjectInfo] = useState([]);
-  const { lang } = useLang();
-  const langDir = lang === "ar" ? "rtl" : "ltr";
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [popUp, setPopUp] = useState(false);
   const queryClient = useQueryClient();
 
+  const { lang } = useLang();
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
   };
@@ -53,23 +51,23 @@ export default function ProjectInfo({ clientData }) {
         {/* delete alert */}
         {popUp && (
           <PopUp
-            iconImage="/assets/icon5.svg"
+            iconImage={<DeleteIcon className="w-[130px]" />}
             type="yes-no"
             noAction={() => setPopUp(!popUp)}
             yesAction={() => {
-              HandleDeleteProject({ ...popUp });
+              HandleDeleteProject({ ...popUp, queryClient });
               setPopUp(!popUp);
             }}
           >
             <div className="w-full text-center rounded-xl gap-4 flex flex-col ">
-              <p>
+              <p className="text-base">
                 {getText(
                   "Are you sure you want to delete",
                   "هل أنت متأكد أنك تريد الحذف ؟"
                 )}
                 <b className="mx-1">{popUp.name}</b>
               </p>
-              <p className="text-base">
+              <p className="text-md font-bold">
                 {getText(
                   "This action can’t be undone",
                   "لا يمكن التراجع عن هذا الإجراء"
@@ -78,80 +76,22 @@ export default function ProjectInfo({ clientData }) {
             </div>
           </PopUp>
         )}
-        <h2
-          dir={langDir}
-          className="text-primary-color1 capitalize font-semibold
-        md:text-xl
-        sm:text-lg"
-        >
+        <h2 className="text-primary-color1 capitalize font-semibold text-lg">
           {getText("projects", "المشاريع")}
         </h2>
         <div className="grid grid-flow-row sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center justify-items-start gap-5">
-          {projectInfo?.map((project, i) => {
-            return (
-              <div
-                key={project._id}
-                id="project-access"
-                className="card image-full w-full max-w-[400px] h-[205px] shadow-xl"
-              >
-                <figure>
-                  {project?.img?.path ? (
-                    <LazyLoadImage
-                      effect="opacity"
-                      className="object-cover"
-                      src={project?.img?.path}
-                      alt={`${project?.img?.name}`}
-                    />
-                  ) : (
-                    <div
-                      className="w-full h-full
-              flex justify-center items-center capitalize font-light"
-                    >
-                      {getText("project image", "صورة المشروع")}
-                    </div>
-                  )}
-                </figure>
-                <div className="card-body justify-between py-4 px-5">
-                  <h2 className="card-title sm:text-sm md:text-md lg:text-base">
-                    {project.name || getText("Project name", "اسم المشروع")}
-                  </h2>
-                  <div className="card-actions justify-end gap-6">
-                    {project.owner === clientData._id && (
-                      <>
-                        <Link
-                          to={`project/${project._id}`}
-                          state={{ userID: clientData.userName }}
-                          id="edit-project"
-                          title="Edit"
-                          className="btn bg-primary-color3 btn-sm border-none text-white"
-                        >
-                          <MdOutlineModeEditOutline size={22} />
-                        </Link>
-                      </>
-                    )}
-                    <button
-                      id="delete-project"
-                      title="Delete"
-                      onClick={() =>
-                        setPopUp({
-                          projectID: project._id,
-                          projectInfo,
-                          setProjectInfo,
-                          index: i,
-                          isOwner: project.owner === clientData._id,
-                          userID: clientData._id,
-                          name: project.name,
-                        })
-                      }
-                      className="btn bg-primary-color3 btn-sm border-none text-white"
-                    >
-                      <RiDeleteBin6Line size={22} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          {projectInfo?.map((project, i) => (
+            <SingleProject
+              project={project}
+              key={i}
+              i={i}
+              clientData={clientData}
+              projectInfo={projectInfo}
+              setProjectInfo={setProjectInfo}
+              queryClient={queryClient}
+              setPopUp={setPopUp}
+            />
+          ))}
           {/* create project btn */}
           <button
             onClick={() =>
@@ -176,3 +116,106 @@ export default function ProjectInfo({ clientData }) {
     </>
   );
 }
+
+const SingleProject = ({
+  project,
+  clientData,
+  projectInfo,
+  setProjectInfo,
+  queryClient,
+  setPopUp,
+  i,
+}) => {
+  const [loadingImg, setLoadingImg] = useState(
+    project?.img?.path ? true : false
+  );
+  const navigate = useNavigate();
+
+  const { lang } = useLang();
+  const getText = (enText, arText) => {
+    return lang === "en" || !lang ? enText : arText;
+  };
+
+  return (
+    <>
+      {loadingImg && (
+        <div
+          className="h-[205px] w-full flex flex-col justify-center items-center gap-8 capitalize
+        bg-primary-color2 text-primary-color4 shadow-xl rounded-2xl"
+        >
+          <p>{getText("loading project", "تحميل المشروع")}</p>
+          <span className="loading loading-spinner loading-lg " />
+        </div>
+      )}
+      <div
+        key={project._id}
+        id="project-access"
+        className={`card image-full w-full max-w-[400px] h-[205px] shadow-xl
+          ${loadingImg ? "!hidden" : "flex"}`}
+      >
+        <figure>
+          {project?.img?.path ? (
+            <img
+              onLoad={() => setLoadingImg(false)}
+              className={`object-cover h-full w-full`}
+              src={project?.img?.path}
+              alt={`${project?.img?.name}`}
+            />
+          ) : (
+            <div
+              className={`w-full h-full flex justify-center items-center capitalize font-medium
+              bg-primary-color2 text-primary-color4 `}
+            >
+              {getText("project image", "صورة المشروع")}
+            </div>
+          )}
+        </figure>
+        <div className="card-body justify-between py-4 px-5">
+          <h4 className="card-title sm:text-sm md:text-md ">
+            {project.name || getText("Project name", "اسم المشروع")}
+          </h4>
+          <div className="card-actions justify-end gap-6">
+            {project.owner === clientData._id && (
+              <button
+                onClick={() => {
+                  queryClient.refetchQueries({
+                    queryKey: ["fetchClients"],
+                    exact: false,
+                  });
+                  queryClient.invalidateQueries({
+                    queryKey: ["fetchClientEdit"],
+                    exact: false,
+                  });
+                  navigate(`project/${project._id}`);
+                }}
+                id="edit-project"
+                title="Edit"
+                className="btn bg-primary-color3 btn-sm border-none text-white"
+              >
+                <MdOutlineModeEditOutline size={22} />
+              </button>
+            )}
+            <button
+              id="delete-project"
+              title="Delete"
+              onClick={() =>
+                setPopUp({
+                  projectID: project._id,
+                  projectInfo,
+                  setProjectInfo,
+                  index: i,
+                  isOwner: project.owner === clientData._id,
+                  userID: clientData._id,
+                  name: project.name,
+                })
+              }
+              className="btn bg-primary-color3 btn-sm border-none text-white"
+            >
+              <RiDeleteBin6Line size={22} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};

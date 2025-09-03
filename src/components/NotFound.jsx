@@ -3,8 +3,9 @@ import MainLayout from "../Layout/MainLayout";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { FaFileCircleXmark } from "react-icons/fa6";
 import cookie from "react-cookies";
+import { BgIcon } from "../icons/BgIcon";
+import { ErrorLapIcon } from "../icons/ErrorLapIcon";
 
-const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
 const userCookies = cookie.load("user_token");
 
 export function NotFound() {
@@ -23,13 +24,13 @@ export function NotFound() {
       type="not-found"
       pageTitle={getText(`Error ${err}`, `خطا ${err}`)}
     >
-      <section className="h-full w-full flex justify-center items-center flex-col gap-5 container max-w-full">
+      <BgIcon className="absolute z-0 top-0 left-0 w-full h-dvh " />
+      <section className="h-full w-full flex justify-center items-center flex-col gap-5 container max-w-full relative z-10">
         {/* image */}
         {location?.state?.err === "no-project-found" ? (
           <FaFileCircleXmark className="text-primary-color1 sm:text-[100px] md:text-[120px] lg:text-[180px]" />
         ) : (
-          <img
-            src={serverImagesPath + "not-found.svg"}
+          <ErrorLapIcon
             className="sm:w-[180px] md:w-[200px] lg:w-[230px]"
             alt="not-found-image"
           />

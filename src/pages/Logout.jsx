@@ -1,10 +1,9 @@
-import React from "react";
 import { Line } from "../components/Line";
 import { useLang } from "../context/LangContext";
 import MainLayout from "../Layout/MainLayout";
 import LogoutReq from "../lib/LogoutReq";
-
-const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
+import { BgIcon } from "../icons/BgIcon";
+import { SecMagLogoIcon } from "../icons/SecMagLogoIcon";
 
 export default function Logout() {
   const { lang } = useLang();
@@ -20,12 +19,9 @@ export default function Logout() {
       logoStyle="hidden"
       pageTitle={getText("Logout", "تسجيل الخروج")}
     >
-      <section className="flex flex-col justify-center h-dvh items-center gap-20 container max-w-full ">
-        <img
-          src={serverImagesPath + "logo/mainLogo2.svg"}
-          className="sm:w-[100%] sm:max-w-[300px] md:max-w-full md:w-[350px] lg:w-[450px] xl:w-[550px]"
-          alt="logo-logout"
-        />
+      <BgIcon className="absolute z-0 top-0 left-0 w-full h-dvh " />
+      <section className="flex flex-col justify-center h-dvh items-center gap-20 container max-w-full relative z-10 ">
+        <SecMagLogoIcon className="sm:w-[100%] sm:max-w-[300px] md:max-w-full md:w-[350px] lg:w-[450px] xl:w-[550px]" />
         <Line w="100%" h="2px" />
         <div className="flex flex-col gap-3 justify-center text-center items-center">
           <h1

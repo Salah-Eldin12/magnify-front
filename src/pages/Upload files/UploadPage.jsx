@@ -16,6 +16,8 @@ import { useLocation } from "react-router-dom";
 import { InputContainer } from "../../components/InputContainer";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
+import { Group3 } from "../../components/pagesIcons";
+import { SlCloudUpload } from "react-icons/sl";
 
 export default function UploadPage() {
   const location = useLocation().pathname;
@@ -159,16 +161,16 @@ export default function UploadPage() {
   });
   const pageName = location.includes("missing-photo");
 
-
   return (
     <MainLayout
       type="upload-files"
       pageTitle={pageName ? "Missing Photo" : "Photo Session Data"}
     >
+      <Group3 />
       <div
         dir={langDir}
         className="flex h-full overflow-hidden row-span-11 flex-col gap-5 justify-center items-center max-w-[2000px]
-         md:w-8/12 lg:w-6/12 relative container "
+        md:w-8/12 lg:w-6/12 relative container "
       >
         <h2
           className="text-primary-color1 font-bold capitalize w-full text-center
@@ -212,10 +214,7 @@ export default function UploadPage() {
             className=" flex flex-col items-center py-10 rounded-xl w-full
           justify-center gap-5 bg-lightGreen text-primary-color1 relative"
           >
-            <img
-              src="/assets/icon9.svg"
-              className="sm:w-[100px] md:w-[150px] h-[110px] object-fill"
-            />
+            <SlCloudUpload size={140} />
             <input
               accept={AllowType}
               onChange={uploading ? null : HandleChange}
@@ -246,7 +245,7 @@ export default function UploadPage() {
           <div
             id="files"
             className="flex flex-col  h-[60%] gap-5 justify-between items-center
-            rounded-xl bg-lightGreen py-3 px-3 overflow-y-scroll w-full "
+            rounded-xl bg-lightGreen py-3 px-3 overflow-y-auto w-full "
           >
             <div id="show-choosen-files" className="flex flex-col gap-2 w-full">
               {ShowFile}

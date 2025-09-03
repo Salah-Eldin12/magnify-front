@@ -1,11 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLang } from "../context/LangContext";
 import { SlCloudUpload } from "react-icons/sl";
 import { RiErrorWarningFill } from "react-icons/ri";
 import { SecondaryBtn } from "./Btns";
 import { IoCloseCircleSharp, IoCloudDoneOutline } from "react-icons/io5";
 import { CircularProgressbar } from "react-circular-progressbar";
-import { UploadProjectFolder, UploadPilotProject } from "../lib/DashboardReq";
+import {
+  UploadProjectFolder,
+  UploadPilotProject,
+  CancelUploadRequest,
+} from "../lib/DashboardReq";
 
 export const DragDropUploader = ({
   closePopUp,
@@ -19,6 +23,7 @@ export const DragDropUploader = ({
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState("wait");
   const [progress, setProgress] = useState(0);
+  const controllerRef = useRef(null);
 
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
@@ -52,29 +57,56 @@ export const DragDropUploader = ({
 
   const HandleUpload = () => {
     setUploading("progress");
+    controllerRef.current = new AbortController();
     if (uploadFor === "project")
       UploadProjectFolder({
         projectID: project.projectId,
-        file,
-        setProgress,
         date: project.date,
+        projectType: project.type,
+        file,
+        setFile,
+        setProgress,
         setUploading,
         closePopUp,
+        setErr,
+        signal: controllerRef.current.signal,
+        getText,
+        lang,
       });
     else if (uploadFor === "pilot")
       UploadPilotProject({
         file,
+        setFile,
         setProgress,
         setUploading,
         closePopUp,
         refetch,
+        setErr,
+        signal: controllerRef.current.signal,
+        getText,
       });
   };
+
   useEffect(() => {
     if (progress === 100) {
       setUploading("finishing");
     }
   }, [progress]);
+
+  const handleCancel = () => {
+    if (controllerRef.current) {
+      controllerRef.current.abort();
+      CancelUploadRequest({
+        projectID: project ? project.projectId : file.name,
+        date: project?.date,
+        projectType: project?.type,
+        uploadFor,
+        file,
+        refetch,
+      });
+    }
+    closePopUp();
+  };
 
   return (
     <div
@@ -93,13 +125,18 @@ export const DragDropUploader = ({
           <h3 className="sm:text-base md:text-lg lg:text-xl font-semibold text-primary-color2 ">
             {text}
           </h3>
-          <IoCloseCircleSharp
-            size={30}
-            className="fill-red-600 cursor-pointer"
+          <button
+            type="button"
             onClick={closePopUp}
-          />
+            disabled={uploading === "finishing"}
+            className="disabled:opacity-50 "
+          >
+            <IoCloseCircleSharp
+              size={30}
+              className="fill-red-600 cursor-pointer "
+            />
+          </button>
         </div>
-
         <div
           id="middle"
           className="outline-dashed outline-primary-color1 p-2 h-full"
@@ -122,12 +159,17 @@ export const DragDropUploader = ({
                     />
                     <span
                       className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]
-                    text-primary-color2 text-base"
+        text-primary-color2 text-base"
                     >{`${progress}%`}</span>
                   </div>
                   <span className="sm:text-sm md:text-md lg:text-base">
                     {getText("Uploading File...", "جاري تحميل الملف...")}
                   </span>
+                  <SecondaryBtn
+                    action={handleCancel}
+                    text={getText("Cancel Upload", "إلغاء التحميل")}
+                    style="!bg-red-700 !text-white hover:!bg-red-800 !border-none"
+                  />
                 </div>
               )}
               {uploading === "finishing" && (
@@ -156,11 +198,11 @@ export const DragDropUploader = ({
                       {getText("Choosen file", "الملف المختار")}
                     </p>
                     <span
-                      className="text-primary-color2 py-2 px-4 rounded-lg line-clamp-1 border
+                      className="text-primary-color2 py-2 px-4 rounded-lg line-clamp-1 border text-left
                      border-primary-color1 
                      sm:w-11/12 sm:text-sm
                      md:text-md
-                     lg:w-10/12 lg:text-base"
+                     lg:w-8/12 lg:text-base"
                     >
                       {file.name}
                     </span>

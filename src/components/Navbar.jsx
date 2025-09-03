@@ -5,8 +5,8 @@ import cookie from "react-cookies";
 import { GrLanguage } from "react-icons/gr";
 import { LuLogOut } from "react-icons/lu";
 import { Link } from "react-router-dom";
+import { MagLogoIcon } from "../icons/MagLogoIcon";
 
-const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
 const user = cookie.load("user_token");
 
 const Navbar = ({ setPopUp, logoStyle, type }) => {
@@ -16,6 +16,7 @@ const Navbar = ({ setPopUp, logoStyle, type }) => {
   const Logout = () => {
     setPopUp(true);
   };
+
   // handle change languagepng
   const handleChangeLang = useCallback(() => {
     const newLang = lang === "ar" ? "en" : "ar";
@@ -31,7 +32,7 @@ const Navbar = ({ setPopUp, logoStyle, type }) => {
   }
 
   return (
-    <header dir="ltr" className="w-full max-w-full static top-0 flex">
+    <header dir="ltr" className="w-full max-w-full static top-0 flex z-10">
       {!user || type === "not-found" ? (
         <nav
           className={`flex container max-w-full  h-fit mt-3 ${
@@ -40,10 +41,8 @@ const Navbar = ({ setPopUp, logoStyle, type }) => {
         >
           {logoStyle && (
             <Link to="/">
-              <img
-                src={serverImagesPath + "logo/mainLogo2.svg"}
-                alt="magnify-logo"
-                className={` sm:w-[90px] md:w-[110px] lg:w-[130px]`}
+              <MagLogoIcon
+                className={`sm:w-[90px] md:w-[110px] lg:w-[140px]`}
               />
             </Link>
           )}
@@ -57,13 +56,9 @@ const Navbar = ({ setPopUp, logoStyle, type }) => {
           </button>
         </nav>
       ) : (
-        <nav className="items-center flex justify-between sticky w-full max-w-full bg-primary-color1 container  py-3 top-0  ">
+        <nav className="items-center flex justify-between sticky w-full max-w-full bg-primary-color1 container py-3 top-0  ">
           <Link to="/">
-            <img
-              src={serverImagesPath + "/logo/mainLogo.svg"}
-              alt="magnify-logo"
-              className="sm:w-[90px] md:w-[110px]"
-            />
+            <MagLogoIcon className="w-[120px]" />
           </Link>
           <div
             className="flex justify-center items-center   

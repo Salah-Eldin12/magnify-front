@@ -6,67 +6,75 @@ import { InputContainer } from "../../components/InputContainer.jsx";
 import { SecondaryBtn } from "../../components/Btns.jsx";
 import UploadProjectImg from "../../components/UploadProjectImg.jsx";
 import { useQuery, useQueryClient } from "react-query";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { Loading } from "../../components/Loading.jsx";
+import {
+  Navigate,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { NotFound } from "../../components/NotFound.jsx";
 import * as Yup from "yup";
 import axios from "axios";
-import { RiDeleteBinLine, RiInformationFill } from "react-icons/ri";
-import {
-  HandleAddAccess,
-  HandleEditProject,
-  HandleRemoveAccess,
-} from "../../lib/DashboardReq.jsx";
-import { FaCheck } from "react-icons/fa";
+import { HandleEditProject } from "../../lib/DashboardReq.jsx";
 import cookie from "react-cookies";
 import { useUser } from "../../context/UserContext.jsx";
 import LoadingProjectData from "../../components/Dashboard/LoadingProjectData.jsx";
+import { ProjectDate } from "../../components/Dashboard/ProjectInfo/projectDate.jsx";
+import { EmailAccess } from "../../components/Dashboard/ProjectInfo/EmailAccess.jsx";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 const userCookies = cookie.load("user_token");
 const header = { headers: { token: `${userCookies}` } };
 
 export default function EditProject() {
-  const { lang } = useLang();
-  const { projectID } = useParams();
-  const location = useLocation();
-  const { userID } = location.state || {};
   const { user } = useUser();
-  const [errorMsg, setErrorMsg] = useState("");
+  const { lang } = useLang();
+
+  const { projectID } = useParams();
+  const { clientID } = useParams();
+  const [msg, setMsg] = useState({ active: "", type: "", content: "" });
+  const [submiting, setSubmiting] = useState(false);
   const queryClient = useQueryClient();
 
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
   };
 
-  const [submiting, setSubmiting] = useState(false);
   const navigate = useNavigate();
+
+  if (!user?.isAdmin) {
+    return (
+      <Navigate
+        to={"/unauthorized"}
+        state={{
+          err: "unauthorized",
+        }}
+      />
+    );
+  }
   // handle change project
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const {
-    error,
-    isLoading,
-    isRefetching,
-    data: projectData,
-  } = useQuery(
-    ["fetchProject"],
+  const projectDataFetch = useQuery(
+    ["fetchProject", projectID],
     () =>
       axios
         .get(`${serverPath}project/${projectID}`, header)
         .then((res) => res.data),
     {
+      enabled: !!projectID,
       retry: false,
       refetchOnWindowFocus: false,
+      refetchOnMount: false,
     }
   );
 
-  if (isLoading || isRefetching) {
+  if (projectDataFetch.isLoading || projectDataFetch.isRefetching) {
     return <LoadingProjectData />;
   }
-  if (error || !user.isAdmin) {
+  if (projectDataFetch.error) {
     return (
       <NotFound
         status={401}
@@ -93,41 +101,65 @@ export default function EditProject() {
       getText("Project No is required", "رقم المشروع مطلوب")
     ),
   });
+  const projectData = projectDataFetch.data;
+  const {
+    number,
+    name,
+    location,
+    type,
+    area,
+    height,
+    consultant,
+    duration,
+    date,
+    status,
+    img,
+    subDate,
+    accessUser,
+  } = projectData;
 
   return (
     <Formik
-      initialValues={{
-        number: projectData ? projectData.number : "",
-        name: projectData ? projectData.name : "",
-        location: projectData ? projectData.location : "",
-        type: projectData ? projectData.type : "",
-        area: projectData ? projectData.area : "",
-        height: projectData ? projectData.height : "",
-        consultant: projectData ? projectData.consultant : "",
-        duration: projectData ? projectData.duration : "",
-        date: projectData ? projectData.date : "",
-        status: projectData ? projectData.status : "",
-        img: projectData ? projectData.img : { path: "", name: "" },
-        subDate: projectData ? projectData.subDate : [],
-        accessUser: projectData ? projectData.accessUser : [],
-      }}
+      initialValues={
+        projectData
+          ? {
+              number: number,
+              name: name,
+              location: location,
+              type: type,
+              area: area,
+              height: height,
+              consultant: consultant,
+              duration: duration,
+              date: date,
+              status: status,
+              img: img,
+              subDate: subDate,
+              accessUser: accessUser,
+            }
+          : {
+              number: "",
+              name: "",
+              location: "",
+              type: "",
+              area: "",
+              height: "",
+              consultant: "",
+              duration: "",
+              date: "",
+              status: "",
+              img: { path: "", name: "" },
+              subDate: [],
+              accessUser: [],
+            }
+      }
       validationSchema={ProjectDataSchema}
       onSubmit={(values) => {
-        if (values.status === "done") {
-          let update = { ...values };
-          delete update.subDate;
-          values = update;
-        } else {
-          let update = { ...values };
-          delete update.date;
-          values = update;
-        }
         HandleEditProject({
           projectID,
           values,
           setSubmiting,
-          navigate,
-          setErrorMsg,
+          setMsg,
           lang,
           queryClient,
         });
@@ -141,6 +173,7 @@ export default function EditProject() {
         setFieldError,
         setValues,
         touched,
+        dirty,
       }) => {
         // inputs fields
         const InputFields = [
@@ -251,99 +284,108 @@ export default function EditProject() {
           >
             <Form
               id="content"
-              className="flex flex-col items-center justify-between w-full py-5 gap-5 container"
+              className="flex flex-col justify-start w-full py-5 gap-8 container"
             >
               <div
                 id="inputs-container"
-                className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 place-content-between place-items-start w-full "
+                className="flex flex-col gap-2 w-full "
               >
+                <div
+                  id="text-inputs-container"
+                  className="flex flex-col gap-5 w-full"
+                >
+                  <p
+                    className="text-primary-color2 text-start w-full font-semibold
+                    sm:text-base  lg:text-lg"
+                  >
+                    {lang === "ar" ? "تفاصيل المشروع" : "Project Info"}
+                  </p>
+                  <div
+                    id="text-inputs"
+                    className="grid gap-3 w-full 
+                    sm:grid-cols-1 sm:grid-rows-8
+                    md:grid-cols-2 md:grid-rows-3 
+                    lg:grid-rows-2 lg:grid-cols-4  "
+                  >
+                    {InputFields.map((input, i) => {
+                      if (input.type === "text") {
+                        return (
+                          <InputContainer
+                            containerStyle={`text-primary-color2`}
+                            inputContainerStyle={
+                              "!bg-transparent !border-primary-color2 !rounded-lg !px-3 !py-2 !text-sm !h-[37px]"
+                            }
+                            labelStlye={"!px-1 !text-sm font-medium"}
+                            key={i}
+                            {...input}
+                            setFieldValue={setFieldValue}
+                            onChangeHandle={(e) => {
+                              handleChange(e);
+                              setMsg((prev) => ({ ...prev, active: false }));
+                            }}
+                            setValues={setValues}
+                            values={values}
+                            errors={input.errors}
+                            touched={input.touched}
+                          />
+                        );
+                      } else if (input.type === "file") {
+                        return (
+                          <UploadProjectImg
+                            value={input.value}
+                            key={i}
+                            projectID={projectID}
+                            setFieldValue={setFieldValue}
+                            setFieldError={setFieldError}
+                            errors={errors}
+                          />
+                        );
+                      }
+                    })}
+                  </div>
+                  {/* save btn */}
+                  <SubmitBtn msg={msg} submiting={submiting} />
+                </div>
                 {InputFields.map((input, i) => {
-                  if (input.type === "file") {
+                  if (input.name === "accessUser") {
                     return (
-                      <UploadProjectImg
-                        value={input.value}
-                        key={i}
-                        projectID={projectID}
-                        setFieldValue={setFieldValue}
-                        setFieldError={setFieldError}
-                        errors={errors}
-                      />
-                    );
-                  } else if (input.name === "accessUser") {
-                    return (
-                      <ProjectEmailAccess
+                      <EmailAccess
+                        queryClient={queryClient}
                         key={i}
                         values={values}
                         setFieldValue={setFieldValue}
                         projectID={projectID}
+                        clientID={clientID}
                       />
                     );
                   } else if (input.name === "status") {
                     /* Show Project Dates based on Status */
                     return (
-                      <ProjectSubDates
+                      <ProjectDate
                         key={i}
-                        lang={lang}
                         values={values}
                         setValues={setValues}
                         setFieldValue={setFieldValue}
-                        handleChange={handleChange}
-                      />
-                    );
-                  } else {
-                    return (
-                      <InputContainer
-                        containerStyle={`text-primary-color2`}
-                        inputContainerStyle={
-                          "!bg-transparent !border-primary-color2 !rounded-lg !py-2 !px-3"
-                        }
-                        labelStlye={"!px-1"}
-                        key={i}
-                        {...input}
-                        setFieldValue={setFieldValue}
-                        onChangeHandle={(e) => {
-                          handleChange(e);
-                          setErrorMsg();
-                        }}
-                        setValues={setValues}
-                        values={values}
-                        errors={input.errors}
-                        touched={input.touched}
+                        projectID={projectID}
                       />
                     );
                   }
                 })}
               </div>
-              <div className="flex w-full items-center justify-end gap-3">
-                <div
-                  className={`text-error
-                    sm:text-xs md:text-sm lg:text-md ${
-                      errorMsg
-                        ? "translate-x-0 opacity-100"
-                        : "-translate-x-5 opacity-0"
-                    } duration-300 `}
-                >
-                  <span>{errorMsg}</span>
-                </div>
-                <SecondaryBtn
-                  disabled={submiting}
-                  action={() => {
-                    navigate(`/dashboard/${userID}`);
-                  }}
-                  style="!w-[180px] !bg-transparent border-darkGreen !text-primary-color2 
-                  sm:!hidden md:!flex
-                  hover:!bg-darkGreen hover:!text-white"
-                  text={getText("back", "رجوع")}
-                  type="button"
-                />
-                <SecondaryBtn
-                  loading={submiting}
-                  disabled={submiting}
-                  type="submit"
-                  style="!w-[180px]"
-                  text={getText("Save Data", "حفظ التعديلات")}
-                />
-              </div>
+              <SecondaryBtn
+                text={getText("Back", "رجوع ")}
+                style="!w-[180px] !min-w-fit !text-sm font-medium self-end"
+                type="button"
+                action={() => {
+                  if (dirty) {
+                    queryClient.refetchQueries({
+                      queryKey: ["fetchProject"],
+                      exact: false,
+                    });
+                  }
+                  navigate(`/dashboard/${clientID}`);
+                }}
+              />
             </Form>
           </MainLayout>
         );
@@ -352,318 +394,37 @@ export default function EditProject() {
   );
 }
 
-const ProjectSubDates = ({
-  lang,
-  setFieldValue,
-  values,
-  setValues,
-  handleChange,
-}) => {
+const SubmitBtn = ({ msg, submiting }) => {
+  const { lang } = useLang();
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
   };
 
-  const projectDates = values.subDate;
-  // handle change project dates
-  const HandleChangeDates = (e, i) => {
-    const { value } = e.target;
-    const updated = [...projectDates];
-    updated[i] = value;
-    setFieldValue("subDate", updated);
-  };
-  // handle delete project dates
-  const HandleDeleteDates = (i) => {
-    const updated = [...projectDates];
-    updated.splice(i, 1);
-    setFieldValue("subDate", updated);
-  };
-  // add project subDate
-  const AddProject = () => {
-    const updated = [...projectDates];
-    updated.push("");
-    setFieldValue("subDate", updated);
-  };
-
   return (
     <div
-      id="project-dates"
-      className="w-full flex flex-col gap-1 col-span-full mt-5 "
+      id="action-btns"
+      className="flex w-full gap-4 items-center justify-end"
     >
-      <p
-        className="text-primary-color2 text-start w-full font-semibold
-  sm:text-sm md:text-md lg:text-lg"
+      <div
+        className={` font-medium duration-300
+                    sm:text-xs md:text-sm lg:text-md ${
+                      msg.active
+                        ? "translate-x-0 opacity-100"
+                        : "-translate-x-5 opacity-0"
+                    }
+                    ${
+                      msg.type === "success" ? "text-success" : "text-error"
+                    }  `}
       >
-        {getText("Project status and date", "تواريخ المشروع")}
-      </p>
-      <InputContainer
-        containerStyle={`text-primary-color2`}
-        labelStlye={"!px-1"}
-        setFieldValue={setFieldValue}
-        type="radio"
-        name="status"
+        <span>{msg.content}</span>
+      </div>
+      <SecondaryBtn
+        loading={submiting}
+        disabled={submiting}
+        type="submit"
+        style="!w-[180px] !min-w-fit !text-sm font-medium "
+        text={getText("Save Data", "حفظ التعديلات")}
       />
-      <div
-        id="dates-container"
-        className="grid sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 w-full gap-4 items-end"
-      >
-        {values.status === "in-progress" ? (
-          <>
-            {projectDates.map((date, i) => (
-              <div key={i} className="flex items-end justify-center ">
-                <InputContainer
-                  require={true}
-                  value={
-                    date ? new Date(date).toISOString().split("T")[0] : date
-                  }
-                  name={"subDate" + i}
-                  type="date"
-                  onChangeHandle={(e) => {
-                    HandleChangeDates(e, i);
-                  }}
-                  text={getText(
-                    "Project Date" + " " + Number(i + 1),
-                    "تاريخ المشروع"
-                  )}
-                  containerStyle={`text-primary-color2`}
-                  inputContainerStyle={
-                    "!bg-transparent !border-primary-color2 !rounded-lg !py-2 !px-3"
-                  }
-                  labelStlye={"!px-1"}
-                  HandleDeleteIcon={
-                    projectDates.length > 1
-                      ? () => {
-                          HandleDeleteDates(i);
-                        }
-                      : null
-                  }
-                />
-              </div>
-            ))}
-            {/* // Add a new date */}
-            <SecondaryBtn
-              action={AddProject}
-              type="button"
-              text={getText("Add project by date", "اضف مشروع من خلال التاريخ")}
-              style="!rounded-lg !py-2 sm:!max-w-[190px] md:!max-w-[230px] lg:!max-w-[260px] !h-fit"
-            />
-          </>
-        ) : (
-          <InputContainer
-            name="date"
-            containerStyle={`text-primary-color2`}
-            inputContainerStyle={
-              "!bg-transparent !border-primary-color2 !rounded-lg !py-2 !px-3"
-            }
-            labelStlye={"!px-1"}
-            setFieldValue={setFieldValue}
-            onChangeHandle={(e) => {
-              handleChange(e);
-            }}
-            type="date"
-            text={getText("Project Date", "تاريخ المشروع")}
-            value={
-              values.date
-                ? new Date(values.date).toISOString().split("T")[0]
-                : values.date || ""
-            }
-            setValues={setValues}
-          />
-        )}
-      </div>
-    </div>
-  );
-};
-
-const ProjectEmailAccess = ({ values, setFieldValue, projectID }) => {
-  const projectAccessEmail = values.accessUser;
-
-  const { lang } = useLang();
-
-  // add email
-  const AddEmail = () => {
-    const updated = [...projectAccessEmail];
-    updated.push({ email: "" });
-    setFieldValue("accessUser", updated);
-  };
-
-  return (
-    <div
-      id="add-access-to-project"
-      className="w-full flex flex-col gap-2 col-span-full mt-5 "
-    >
-      <p
-        className="text-primary-color2 px-1 m-0 text-start w-full font-semibold
-  sm:text-sm md:text-md lg:text-lg"
-      >
-        {lang === "ar"
-          ? "اعطاء صلاحية المشاهدة لمستخدم اخر "
-          : "Add access to user"}
-      </p>
-      <div
-        id="emails"
-        className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 w-full items-center gap-x-4"
-      >
-        {projectAccessEmail?.map((projectAccess, i) => {
-          return (
-            <EmailField
-              key={i}
-              index={i}
-              projectAccess={projectAccess}
-              projectID={projectID}
-              projectAccessEmail={projectAccessEmail}
-              setFieldValue={setFieldValue}
-              values={values}
-            />
-          );
-        })}
-        <SecondaryBtn
-          action={AddEmail}
-          name="add-email"
-          type="button"
-          text={lang === "ar" ? "ادخل بريد الكتروني اخر " : "Add Email Address"}
-          style={`${
-            projectAccessEmail?.length >= 10 && "!hidden"
-          } !rounded-lg !py-2 sm:!max-w-[200px] md:!max-w-[230px] lg:!max-w-[260px] !h-fit sm:mt-4 lg:mt-0`}
-        />
-      </div>
-    </div>
-  );
-};
-
-const EmailField = ({
-  projectAccess,
-  index,
-  projectID,
-  projectAccessEmail,
-  setFieldValue,
-  values,
-}) => {
-  const { lang } = useLang();
-
-  const [loading, setLoading] = useState(false);
-  const [msg, setMsg] = useState({});
-  const getText = (enText, arText) => {
-    return lang === "en" || !lang ? enText : arText;
-  };
-
-  // delete email
-  const DeleteEmail = ({ index }) => {
-    setMsg((prev) => ({
-      ...prev,
-      active: false,
-    }));
-    const updated = [...projectAccessEmail];
-    updated.splice(index, 1);
-    setFieldValue("accessUser", updated);
-  };
-  // change email
-  const HandleChangeEmail = ({ index, e }) => {
-    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
-    setMsg((prev) => ({ ...prev, active: false }));
-    const emailtest = emailRegex.test(e.target.value);
-    if (!emailtest) {
-      setMsg({
-        active: true,
-        msg: getText("Email not valid", "البريد الإلكتروني غير صالح"),
-        type: "error",
-      });
-    }
-    const updated = [...projectAccessEmail];
-    updated[index].email = e.target.value;
-    setFieldValue("accessUser", updated);
-  };
-
-  return (
-    <div className="relative flex flex-col gap-2 ">
-      <div className="relative w-full max-w-[400px] ">
-        <InputContainer
-          name={"access-user-email" + index}
-          type="email"
-          text={getText("Email", "البريد الالكتروني")}
-          disabled={loading}
-          value={projectAccess.email}
-          onChangeHandle={(e) => HandleChangeEmail({ index, e })}
-          placeholder={getText("Enter email address", "ادخل بريد الكتروني")}
-          containerStyle={`text-primary-color2`}
-          inputContainerStyle={
-            "!bg-transparent !border-primary-color2 !rounded-lg !py-2 !px-3 "
-          }
-          labelStlye={"!px-1"}
-          inputStyle={"!overflow-x-auto w-11/12"}
-        />
-        {/* add & remove email buttons */}
-        <div
-          className={`absolute top-[20%] h-full items-center flex gap-2 
-            sm:text-md md:text-base lg:text-lg ${loading && "opacity-40"} ${
-              lang === "ar" ? "left-4" : "right-4"
-            } `}
-        >
-          {loading ? (
-            <span className="loading loading-spinner loading-md text-primary-color2" />
-          ) : (
-            <div className="flex justify-center items-center gap-4">
-              {!projectAccess._id && (
-                <button
-                  type="button"
-                  title="add user"
-                  disabled={msg.active || !projectAccess.email}
-                  className="disabled:opacity-50 disabled:cursor-not-allowed"
-                  onClick={() => {
-                    HandleAddAccess({
-                      projectID,
-                      email: projectAccess.email,
-                      setFieldValue,
-                      setMsg,
-                      setLoading,
-                      values,
-                      lang,
-                    });
-                  }}
-                >
-                  <FaCheck
-                    color="#65957f"
-                    className="group-disabled:opacity-50 duration-300"
-                  />
-                </button>
-              )}
-              <button
-                type="button"
-                title="delete user"
-                onClick={
-                  !projectAccess._id
-                    ? () => DeleteEmail({ index })
-                    : () => {
-                        HandleRemoveAccess({
-                          projectID,
-                          setFieldValue,
-                          setLoading,
-                          email: projectAccess.email,
-                          values,
-                          setMsg,
-                        });
-                      }
-                }
-              >
-                <RiDeleteBinLine className="text-primary-color2" />
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-      <span
-        className={`${
-          msg.active
-            ? "translate-x-0 opacity-100 "
-            : "-translate-x-5 opacity-0 "
-        }
-        ${
-          msg.type === "error" ? "text-error" : "text-success"
-        } duration-300 text-sm px-1 flex items-center gap-1`}
-      >
-        <RiInformationFill size={18} />
-        {msg.msg}
-      </span>
     </div>
   );
 };

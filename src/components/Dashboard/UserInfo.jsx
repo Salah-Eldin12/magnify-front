@@ -98,7 +98,6 @@ export default function UserInfo({ clientData }) {
                 setSubmiting,
                 setMsg,
                 lang,
-                queryClient,
               });
             }
           : (values) => {
@@ -108,12 +107,11 @@ export default function UserInfo({ clientData }) {
                 setSubmiting,
                 setMsg,
                 lang,
-                queryClient,
               });
             }
       }
     >
-      {({ errors, touched, values, handleChange, setFieldValue }) => {
+      {({ errors, touched, values, handleChange, setFieldValue, dirty }) => {
         const InputFieldsUserInfo = [
           {
             type: "text",
@@ -169,11 +167,7 @@ export default function UserInfo({ clientData }) {
             id="user-info"
             className="w-full flex flex-col gap-5 p-4 rounded-lg shadow-lg"
           >
-            <h2
-              className="text-primary-color1 capitalize font-semibold
-            md:text-xl
-            sm:text-lg"
-            >
+            <h2 className="text-primary-color1 capitalize font-semibold text-lg">
               {lang === "ar" ? "معلومات المستخدم" : "user information"}
             </h2>
             {/* Inputs container */}
@@ -196,9 +190,9 @@ export default function UserInfo({ clientData }) {
                   }}
                   containerStyle={`text-primary-color2 ${field.style}`}
                   inputContainerStyle={
-                    "!bg-transparent !border-primary-color2 !rounded-lg !py-2 !px-3"
+                    "!bg-transparent !border-primary-color2 !rounded-lg !py-2 !px-3 !text-sm !h-[37px]"
                   }
-                  labelStlye={"!px-1"}
+                  labelStlye={"!px-1 !text-md font-medium"}
                 />
               ))}
             </div>
@@ -213,7 +207,7 @@ export default function UserInfo({ clientData }) {
                 } 
                 ${msg.type === "error" ? "text-error" : "text-success"}
                 flex items-center gap-1  duration-300
-                sm:text-xs md:text-base`}
+                sm:text-xs md:text-md`}
               >
                 <MdErrorOutline />
                 {msg.msg}
@@ -221,10 +215,20 @@ export default function UserInfo({ clientData }) {
               <SecondaryBtn
                 type={"button"}
                 action={() => {
+                  if (dirty) {
+                    queryClient.refetchQueries({
+                      queryKey: ["fetchClients"],
+                      exact: false,
+                    });
+                    queryClient.invalidateQueries({
+                      queryKey: ["fetchClientEdit"],
+                      exact: false,
+                    });
+                  }
                   navigate("/dashboard");
                 }}
                 style="sm:!hidden md:!flex !bg-transparent border-darkGreen !text-primary-color2
-                              hover:!bg-darkGreen hover:!text-white"
+                hover:!bg-darkGreen hover:!text-white !text-sm "
                 text={getText("back", "رجوع")}
               />
               <SecondaryBtn
@@ -241,7 +245,7 @@ export default function UserInfo({ clientData }) {
                       ? "create user"
                       : "انشاء مستخدم"
                 }
-                style="self-end"
+                style="self-end  !text-sm "
               />
             </div>
           </Form>

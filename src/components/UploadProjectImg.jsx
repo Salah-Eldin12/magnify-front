@@ -25,16 +25,16 @@ export default function UploadProjectImg({
   return (
     <div
       dir={langDir}
-      className=" text-primary-color2 w-full font-medium flex flex-col gap-1 max-w-[400px]
-    sm:text-xs md:text-sm lg:text-base "
+      className=" text-primary-color2 w-full font-medium flex flex-col gap-2 max-w-[400px] h-[37px]"
     >
-      <p className="px-1 text-primary-color2 ">
+      <p className="px-1 text-primary-color2 text-sm font-medium ">
         {getText("Project Image", "صورة المشروع")}
       </p>
       <label
         className={`${
           uploading && "opacity-50 cursor-wait"
-        } cursor-pointer border border-primary-color2 w-full flex items-center py-2 px-3 rounded-lg justify-between gap-2`}
+        } cursor-pointer border border-primary-color2 w-full flex items-center py-2 px-3 rounded-lg justify-between gap-2
+          text-sm h-full`}
       >
         {uploading && (
           <div className="flex w-full justify-center gap-1 items-center">
@@ -54,15 +54,22 @@ export default function UploadProjectImg({
         {!uploading &&
           (!value.name ? (
             <>
-              <span>{getText("choose image", "اختر صورة المشروع")}</span>
+              <span>{getText("choose image", "صورة المشروع")}</span>
               <HiOutlineUpload size={20} />
             </>
           ) : (
             <>
-              <span className="text-sm truncate w-9/12">{value.name}</span>
-              <RiImageEditFill size={25} />
+              <span className=" truncate w-9/12">{value.name}</span>
+              <RiImageEditFill
+                size={20}
+                title={getText("change project image", "تغير صورة المشروع")}
+              />
+              <span className="w-[0.5px] h-full bg-primary-color3" />
               <Link to={value.path} target="_blank">
-                <IoMdEye size={25} />
+                <IoMdEye
+                  size={20}
+                  title={getText("show project image", "مشاهدة صورة المشروع")}
+                />
               </Link>
             </>
           ))}
@@ -77,6 +84,7 @@ export default function UploadProjectImg({
               setFieldValue,
               projectID,
               setFieldError,
+              getText,
             });
           }}
           name={name}

@@ -9,6 +9,8 @@ import { Loading } from "../../../components/Loading";
 import axios from "axios";
 import { HandleResendOtp, HandleSubmitOtp } from "../../../lib/LoginReq";
 import { MdErrorOutline } from "react-icons/md";
+import { ShieldCheckIcon } from "../../../icons/ShieldCheckIcon";
+import { Group1 } from "../../../components/pagesIcons";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
@@ -89,17 +91,14 @@ export const VerifyOtp = () => {
       type="verify-otp"
       pageTitle={getText("Verify Number", "التحقق من الرقم")}
     >
+      <Group1 />
       <section
         className="h-full flex flex-col items-center text-center justify-center container max-w-full
         lg:w-3/6 
         md:w-4/6 md:gap-7
         sm:w-full sm:gap-4 text-primary-color1 "
       >
-        <img
-          src={serverImagesPath + "icon12.svg"}
-          alt="phone-icon"
-          className="sm:w-[110px] md:w-[170px] lg:w-[180] max-w-[180px]"
-        />
+        <ShieldCheckIcon className="sm:w-[110px] md:w-[170px] lg:w-[180] max-w-[180px]" />
 
         {errorOtp && (
           <span

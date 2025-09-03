@@ -48,7 +48,6 @@ export function Dashboard() {
           search={search}
           setSearch={setSearch}
         />
-
         <UsersTable search={search} setSearch={setSearch} />
         <QR bottom="bottom-14" />
       </section>
@@ -64,47 +63,41 @@ const AdminTools = ({ fname, lang, setSearch, search }) => {
   return (
     <div
       id="dashboard-header"
-      className="w-full grid grid-flow-row-dense items-center place-content-between
+      className="w-full grid place-items-between
     sm:grid-cols-2 sm:row-span-2 sm:gap-6
-    md:row-span-1 md:grid-cols-2  md:gap-3 
-    lg:grid-cols-4 "
+    md:row-span-1 md:grid-cols-2 md:gap-3 
+    lg:grid-cols-3 "
     >
       {/* admin name  */}
-      <div
-        id="top-header"
-        className="flex justify-between w-full items-center gap-5
-      sm:col-span-full  
-      lg:col-span-2
-      "
+      <h3
+        id="user-welcome"
+        className={`${
+          lang === "ar" && "flex-row"
+        } text-primary-color1 capitalize font-semibold w-fit h-full items-center
+          sm:col-span-full  
+          lg:col-span-1
+          sm:text-lg`}
       >
-        <h3
-          id="user-welcome"
-          className={`${
-            lang === "ar" && "flex-row"
-          } text-primary-color1 capitalize font-semibold w-fit h-full
-        place-content-center 
-        sm:text-lg
+        <span className="font-medium text-nowrap">
+          {getText("Hello, ", " مرحبا, ")}
+          {fname}
+        </span>
+      </h3>
 
-        lg:text-xl`}
-        >
-          <span className="font-medium text-nowrap">
-            {getText("Hello, ", " مرحبا, ")}
-            {fname}
-          </span>
-        </h3>
-        <InputSearch
-          toggle={true}
-          onChangeHandle={(e) => setSearch(e.target.value)}
-          search={search}
-          setSearch={setSearch}
-          placeholder={getText("Search by name", "ابحث عن اسم")}
-        />
-      </div>
+      <InputSearch
+        toggle={true}
+        onChangeHandle={(e) => setSearch(e.target.value)}
+        search={search}
+        setSearch={setSearch}
+        containerStyle="xl:!col-span-1"
+        open={true}
+        placeholder={getText("Search by name", "ابحث عن اسم")}
+      />
       <div
         id="buttons-container"
-        className="flex gap-3 w-full items-center flex-wrap
+        className="flex gap-3 w-full items-center flex-wrap 
         sm:col-span-full sm:justify-between
-        lg:col-span-2 lg:justify-around "
+        lg:col-span-1 lg:justify-end"
       >
         <SecondaryLink
           text={getText("Create new user", "انشاء مستخدم")}
@@ -112,33 +105,15 @@ const AdminTools = ({ fname, lang, setSearch, search }) => {
           type="button"
           name="create-user"
           style="flex items-center gap-2 bg-primary-color3 border font-normal 
-        hover:border-primary-color3
-        sm:!min-w-[47%]
-        md:!min-w-[31%] 
-        lg:!min-w-[32%]
-        "
-        />
-        <SecondaryLink
-          text={getText("Upload files", "رفع ملفات")}
-          linkTo="project-upload-files"
-          type="button"
-          name="upload-files"
-          style="flex items-center gap-2 bg-primary-color3 border font-normal
-        hover:border-primary-color3
-          sm:!min-w-[47%]
-        md:!min-w-[31%]
-        lg:!min-w-[32%] "
+        hover:border-primary-color3 !w-fit !min-w-fit px-8 !text-sm"
         />
         <SecondaryLink
           text={getText("Pilot Projects", "مشاريع تجريبية")}
           linkTo="pilot-projects"
           type="button"
           name="pilot-projects"
-          style="flex items-center gap-2 bg-primary-color3 border font-normal
-        hover:border-primary-color3
-          sm:!min-w-[47%]
-        md:!min-w-[31%]
-        lg:!min-w-[32%] "
+          style="flex items-center gap-2 bg-primary-color3 border font-normal 
+        hover:border-primary-color3 !w-fit !min-w-fit px-8 !text-sm"
         />
       </div>
     </div>

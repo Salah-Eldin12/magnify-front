@@ -10,8 +10,7 @@ export const CopyRight = () => {
   return (
     user && (
       <footer
-        className="footer-center footer bg-primary-color1 py-3 text-white h-fit
-    
+        className="footer-center footer bg-primary-color1 py-3 text-white h-fit relative
     md:text-sm
     sm:text-xs"
       >

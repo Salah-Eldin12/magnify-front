@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SecondaryBtn } from "./Btns";
 import { useLang } from "../context/LangContext";
-
-const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
+import { SecMagLogoIcon } from "../icons/SecMagLogoIcon";
 
 export const PopUp = ({
   iconImage,
@@ -43,14 +42,8 @@ export const PopUp = ({
         md:w-7/12 md:px-10
         sm:w-10/12 sm:px-8`}
       >
-        <img src={serverImagesPath + "logo/mainLogo2.svg"} alt="logo" />
-        {iconImage && (
-          <img
-            src={iconImage}
-            alt="icon-reset-submit"
-            className="sm:w-[100px] md:w-[110px] lg:w-[120px]"
-          />
-        )}
+        <SecMagLogoIcon className="w-[200px]" />
+        {iconImage && iconImage}
         {icon && icon}
         <div
           className="text-primary-color1 w-full text-center
@@ -87,9 +80,8 @@ export const PopUp = ({
             text={btnText ? btnText : getText("ok", "حسنا")}
             action={action}
             type="button"
-            style="
-            !py-3 md:!text-base md:!px-20 
-              sm:!text-base sm:!px-11 !normal-case"
+            style="md:!text-md md:!px-10 
+              sm:!text-sm sm:!px-6"
           />
         )}
       </div>

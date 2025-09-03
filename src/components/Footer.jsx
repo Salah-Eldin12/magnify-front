@@ -5,6 +5,7 @@ import { CopyRight } from "./CopyRight";
 export const Footer = ({ type }) => {
   const { lang } = useLang();
   const location = useLocation().pathname;
+
   const getText = (enText, arText) =>
     lang === "en" || !lang ? enText : arText;
 
@@ -26,12 +27,11 @@ export const Footer = ({ type }) => {
     },
   ];
 
-
   if (location === "/" || location === "/login") {
     return (
       <footer
         id="footer-links"
-        className="footer flex flex-row justify-between w-full bg-transparent gap-2 mb-3 container max-w-full h-fit"
+        className="footer flex flex-row justify-between w-full bg-transparent gap-2 mb-3 container max-w-full h-fit relative z-10"
         dir={lang === "ar" ? "rtl" : "ltr"}
       >
         {links.map((link) => (
@@ -52,43 +52,25 @@ export const Footer = ({ type }) => {
     !type?.includes("not-found")
   ) {
     return <CopyRight />;
-  } else if (type?.includes("not-found")) {
-    return (
-      <footer
-        id="footer"
-        className={`footer flex justify-center items-start text-primary-color1 gap-1 
-    sm:text-sm sm:pb-16
-    md:text-md md:pb-28
-    lg:!pb-3`}
-      >
-        <span id="need-help">
-          {getText("Do You Need Help?", "هل تحتاج مساعدة؟")}
-        </span>
-        <Link
-          className="font-bold hover:text-primary-color3"
-          to={"https://magnify-vt.com/contact/"}
-        >
-          {getText("Contact Us", "تواصل معنا")}
-        </Link>
-      </footer>
-    );
   } else if (location === "/logout") {
     return;
+  } else if (location.includes("upload-files")) {
+    return <span></span>;
   } else {
     return (
       <footer
         id="footer"
         className={`footer flex justify-center items-start text-primary-color1 gap-1 
     sm:text-sm sm:pb-16
-    md:text-md md:pb-28
-    lg:!pb-3
+    md:text-md md:!pb-3
+    
     ${
-      (location === "/upload-files" && "sm:!pb-20 md:pb-28") ||
-      (location === "/verify-email" && "sm:!pb-20 md:pb-28") ||
-      (location === "/forgot-password" && "sm:!pb-24 md:pb-28") ||
-      (location === "/phone-login" && "sm:!pb-12 md:pb-28") ||
-      (location === "/verify-otp" && "sm:!pb-24 md:pb-28") ||
-      (location === "/create-password" && "sm:!pb-20 md:pb-28")
+      (location.includes("/upload-files") && "sm:!pb-20 md:pb-28") ||
+      (location.includes("/verify-email") && "sm:!pb-14") ||
+      (location.includes("/forgot-password") && "sm:!pb-24 md:pb-28") ||
+      (location.includes("/phone-login") && "sm:!pb-20 ") ||
+      (location.includes("/verify-otp") && "sm:!pb-18") ||
+      (location.includes("/create-password") && "sm:!pb-20 md:pb-28")
     }
   `}
       >

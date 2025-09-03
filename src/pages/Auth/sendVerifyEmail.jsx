@@ -12,6 +12,8 @@ import { HandleSendVerify } from "../../lib/Verify&ResetReq";
 import { Loading } from "../../components/Loading";
 import { NotFound } from "../../components/NotFound";
 import { SecondaryBtn } from "../../components/Btns";
+import { Group2 } from "../../components/pagesIcons";
+import { EmailVerifiedIcon } from "../../icons/EmailVerifiedIcon";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
@@ -55,19 +57,16 @@ export default function SendVerifyEmail() {
       type={"verify-email"}
       pageTitle={getText("Verify Email", "التحقق من اليريد الالكتروني")}
     >
+      <Group2 />
       <section
-        className=" flex flex-col items-center justify-center h-full container max-w-[1000px]
+        className=" flex flex-col items-center justify-center h-full container max-w-[1000px] relative
         lg:w-3/6 
         md:w-4/6 md:gap-14 
         sm:w-full sm:gap-8 "
       >
         {/* text */}
         <div id="text" className="flex flex-col items-center gap-5 w-full">
-          <img
-            src="/assets/icon4.svg"
-            alt="check-email-icon"
-            className="sm:w-[100px] md:w-[120px] lg:w-[120px] xl:w-[140px]"
-          />
+          <EmailVerifiedIcon className="sm:w-[100px] md:w-[180px] lg:w-[160px]" />
           <h1
             className="font-semibold text-primary-color1 truncate
               xl:text-2xl

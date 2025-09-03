@@ -8,12 +8,13 @@ import { DragDropUploader } from "../../../components/DragDropUploader";
 import { useUser } from "../../../context/UserContext";
 import { RenderPilotProjects } from "./RenderPilotProjects";
 import { useQuery } from "react-query";
-import ProjectFolderSkeleton from "../../../components/Skeletons/ProjectFolderSkeleton";
 import axios from "axios";
 import cookie from "react-cookies";
+import { BsBuildingFillSlash } from "react-icons/bs";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 const userCookies = cookie.load("user_token");
+const header = { headers: { token: `${userCookies}` } };
 
 export const PilotProjects = () => {
   const { lang } = useLang();
@@ -22,7 +23,7 @@ export const PilotProjects = () => {
   const navigate = useNavigate();
   const { user } = useUser();
 
-  if (!user.isAdmin) {
+  if (!user?.isAdmin) {
     return (
       <Navigate
         to={"/unauthorized"}
@@ -44,19 +45,16 @@ export const PilotProjects = () => {
     data: Projects,
     refetch,
   } = useQuery(
-    ["fetchPilotProjects"],
+    ["fetchPilotProjects", search],
     () =>
       axios
-        .get(`${serverPath}pilot_project`, {
-          headers: {
-            token: `${userCookies}`,
-          },
-        })
+        .get(`${serverPath}pilot_project`, header)
         .then((res) => res.data.projects),
     {
       retry: false,
       refetchOnWindowFocus: false,
-      enabled: true,
+      refetchOnMount: false,
+      keepPreviousData: true,
     }
   );
 
@@ -65,6 +63,7 @@ export const PilotProjects = () => {
       type="pilot-projects"
       pageTitle={getText("Pilot Projects", "مشاريع تجريبية")}
     >
+      {/* upload files popUp */}
       {popUp && (
         <ProjectUploadPopUp
           setPopUp={setPopUp}
@@ -76,13 +75,15 @@ export const PilotProjects = () => {
 
       <section
         id="content"
-        className="relative w-full !min-h-full flex flex-col items-center container gap-5 overflow-auto"
+        className="relative w-full flex flex-col justify-start container gap-10 overflow-auto"
       >
-        <div id="top" className="flex gap-8 w-full items-center ">
-          <h1
-            className="text-nowrap text-primary-color1 font-semibold
-          sm:text-lg"
-          >
+        <div
+          id="top"
+          className="grid w-full gap-4
+        sm:grid-rows-2 sm:grid-cols-2  
+        md:grid-rows-1 md:grid-cols-3"
+        >
+          <h1 className="text-nowrap text-primary-color1 font-semibold text-xl col-span-1">
             {getText("Pilot Projects", "المشاريع التجريبية")}
           </h1>
           <InputSearch
@@ -94,51 +95,68 @@ export const PilotProjects = () => {
               "Search by project name",
               "ابحث عن اسم المشروع"
             )}
+            containerStyle="xl:!col-span-1"
           />
-        </div>
-        <ul
-          id="table"
-          className="relative rounded-md border border-primary-color3
-          w-full p-5 shadow flex flex-col gap-4 overflow-y-auto "
-        >
-          {/* if no projects with same name */}
-          {isLoading || isRefetching ? (
-            <ProjectFolderSkeleton count={5} />
-          ) : error ? (
-            <div className="flex w-full flex-col items-center justify-center py-2">
-              <span>
-                {getText(
-                  "No pilot projects added yet",
-                  "لا يوجد مشاريع تجريبية حالياً"
-                )}
-              </span>
-            </div>
-          ) : (
-            <RenderPilotProjects
-              search={search}
-              Projects={Projects}
-              refetch={refetch}
-            />
-          )}
-        </ul>
-
-        <div id="btns" className="flex w-full justify-between gap-3">
-          <SecondaryBtn
-            text={getText("Back", "رجوع ")}
-            style="!bg-transparent !text-primary-color2 
-            sm:!hidden md:!flex
+          <div
+            className="flex gap-4
+          sm:justify-start sm:col-span-2
+          md:justify-end md:col-span-1 "
+          >
+            <SecondaryBtn
+              text={getText("Back", "رجوع ")}
+              style="!bg-transparent !text-primary-color2 !text-sm !min-w-[180px]
+              sm:!hidden lg:!flex
             hover:!bg-primary-color3 hover:!text-white"
-            action={() => {
-              navigate(-1);
-            }}
-          />
-          <SecondaryBtn
-            text={getText("create pilot", "انشاء مشروع تجريبي")}
-            action={() => {
-              setPopUp(!popUp);
-            }}
-          />
+              action={() => {
+                navigate(-1);
+              }}
+            />
+            <SecondaryBtn
+              text={getText("create pilot", "انشاء مشروع تجريبي")}
+              action={() => {
+                setPopUp(!popUp);
+              }}
+              style="!text-sm !min-w-[180px]"
+            />
+          </div>
         </div>
+
+        {/* if no projects with same name */}
+        {isLoading || isRefetching ? (
+          <div
+            id="piltoProjects"
+            className="flex w-full flex-col items-center justify-center gap-5 text-primary-color3
+            self-center rounded-box shadow-md overflow-y-auto
+            sm:w-full md:w-6/12 lg:w-8/12"
+          >
+            <span>
+              {getText("Loading projects, please wait", "جاري تحميل المشاريع")}
+            </span>
+            <span className="loading loading-ring loading-lg" />
+          </div>
+        ) : error ? (
+          <div
+            id="piltoProjects"
+            className="flex w-full flex-col items-center justify-center gap-5 text-primary-color3
+            self-center rounded-box shadow-md overflow-y-auto
+            sm:w-full md:w-6/12 lg:w-8/12"
+          >
+            <BsBuildingFillSlash size={100} />
+            <span className="sm:text-sm md:text-md lg:text-base font-medium">
+              {getText(
+                "No pilot projects added yet, create some!",
+                "لا يوجد مشاريع تجريبية حالياً"
+              )}
+            </span>
+          </div>
+        ) : (
+          <RenderPilotProjects
+            search={search}
+            Projects={Projects}
+            refetch={refetch}
+          />
+        )}
+        <div id="btns" className="flex w-full justify-between gap-3"></div>
       </section>
     </MainLayout>
   );

@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
 /////// components
 import { useLang } from "../../context/LangContext";
 import { NotFoundInList } from "../../components/NotFoundInList";
@@ -14,6 +12,8 @@ import MainLayout from "../../Layout/MainLayout";
 import { PopUp } from "../../components/PopUp";
 import { useUser } from "../../context/UserContext";
 import { FaBuildingCircleXmark } from "react-icons/fa6";
+import { Group5 } from "../../components/pagesIcons";
+import { CalenderIcon } from "../../icons/CalenderIcon";
 
 export default function UserProjects() {
   const { lang } = useLang();
@@ -55,15 +55,16 @@ export default function UserProjects() {
         `${user?.userName} - مشاريع`
       )}
     >
+      <Group5 />
       <section
         id="content"
-        className={`relative w-full flex flex-col items-center container max-w-[2000px] gap-8 py-4 overflow-hidden`}
+        className={`relative w-full flex flex-col items-center container max-w-[2000px] gap-8 py-4 overflow-hidden `}
       >
         {/* search by name */}
         <div className="grid sm:grid-cols-2 xl:grid-cols-7 justify-between items-center w-full border-b border-seconder-color1 pb-3">
           <h3
             className="text-primary-color1 capitalize gap-2 font-semibold 
-          xl:text-2xl xl:col-span-2
+          xl:text-2xl xl:col-span-4
           lg:text-xl
           md:text-lg
           sm:text-base sm:col-span-1"
@@ -163,7 +164,7 @@ const ShowProjectDates = ({
   return (
     <PopUp
       type="yes-no"
-      icon={<LazyLoadImage src="/assets/icon10.svg" width={100} />}
+      icon={<CalenderIcon width={100} />}
       btnText={getText("view project", "مشاهدة المشروع")}
       hidden={!date}
       yesAction={() => {
@@ -195,7 +196,7 @@ border-primary-color1 rounded-[48px] "
           onChange={(e) => setDate(e.target.value)}
           value={date}
         >
-          <option disabled selected className="capitalize " value="">
+          <option disabled selected={true} className="capitalize " value="">
             {getText("choose project date to show", "اختر تاريخ المشروع")}
           </option>
           {projectShowDates.subDate?.map((Showdate, i) => (

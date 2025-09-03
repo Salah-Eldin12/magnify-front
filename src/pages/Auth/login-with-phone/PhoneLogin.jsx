@@ -8,8 +8,8 @@ import { MdOutlineErrorOutline } from "react-icons/md";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { InputContainer } from "../../../components/InputContainer";
-
-const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
+import { PhoneIcon } from "../../../icons/PhoneIcon";
+import { Group2 } from "../../../components/pagesIcons";
 
 export const PhoneLogin = () => {
   const [error, setError] = useState(null);
@@ -26,25 +26,28 @@ export const PhoneLogin = () => {
       getText("phone no is requied", "رقم الهاتف مطلوب")
     ),
   });
+
   return (
     <MainLayout
       type="phone-login"
       pageTitle={getText("Phone Login", "التسجيل برقم الهاتف")}
     >
+      <Group2 />
       <section
-        className="h-full flex flex-col items-center text-center justify-center gap-5 container max-w-full
+        className="h-full flex flex-col items-center text-center justify-center gap-7 container max-w-full relative
         lg:w-3/6 
         md:w-4/6 
         sm:w-full "
       >
-        <img
-          src={serverImagesPath + "icon11.svg"}
-          alt="phone-icon"
-          className="sm:w-[140px] md:w-[170px] lg:w-[150px] max-w-[150px]"
-        />
-        <h1 className="text-primary-color1 sm:text-lg md:text-xl lg:text-2xl font-semibold ">
-          {getText("Log In With Phone Number", "التسجيل من خلال رقم الهاتف")}
-        </h1>
+        <div
+          id="top"
+          className="flex flex-col items-center justify-center gap-5"
+        >
+          <PhoneIcon className="sm:w-[160px] md:w-[200px] lg:w-[180px]" />
+          <h1 className="text-primary-color1 sm:text-lg md:text-xl font-semibold ">
+            {getText("Log In With Phone Number", "التسجيل من خلال رقم الهاتف")}
+          </h1>
+        </div>
         <p className="text-primary-color1 sm:text-sm md:text-md lg:text-base ">
           {getText(
             "Please enter your phone number to send you verification message",
@@ -67,7 +70,7 @@ export const PhoneLogin = () => {
             <Form className="w-full flex flex-col items-center gap-4">
               <div className="flex w-full items-center gap-3 flex-col justify-center">
                 {error && (
-                  <div className="sm:text-sm flex items-center rounded-xl gap-2 text-error">
+                  <div className="text-md flex items-center rounded-xl gap-2 text-error">
                     <MdOutlineErrorOutline size={20} />
                     <span>{error}</span>
                   </div>

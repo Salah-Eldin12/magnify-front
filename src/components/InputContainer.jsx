@@ -5,7 +5,7 @@ import "react-phone-input-2/lib/bootstrap.css";
 /////// icons
 import { LuSearch } from "react-icons/lu";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { RiDeleteBinLine, RiInformationFill } from "react-icons/ri";
+import { RiInformationFill } from "react-icons/ri";
 import "react-lazy-load-image-component/src/effects/opacity.css";
 import { Field } from "formik";
 
@@ -26,36 +26,39 @@ export const InputContainer = ({
   setFieldValue,
   disabled,
   autoComplete,
-  HandleDeleteIcon,
+  setDateErr,
 }) => {
   const { lang } = useLang();
   const [showPass, setShowPass] = useState(false);
 
   return (
     <div
-      className={`${containerStyle} max-w-[400px] text-lightGreen w-full font-medium flex items-center gap-1 
-      flex-col sm:!text-sm md:!text-md `}
+      className={`${containerStyle} max-w-[400px] text-lightGreen w-full font-medium flex items-center gap-2 
+      flex-col 
+        sm:text-sm md:text-md `}
     >
       {text && (
-        <span
-          className={`px-3 ${labelStlye} flex self-start justify-between w-full items-center`}
+        <label
+          htmlFor={name}
+          className={`px-3 ${labelStlye} flex self-star justify-between w-full items-center 
+          sm:text-md md:text-base`}
         >
           {text}
-        </span>
+        </label>
       )}
       {type !== "phone" && type !== "select" && type !== "radio" && (
         <div
-          className={`${inputContainerStyle} ${
-            errors && touched ? "border-red-400" : "border-lightGreen"
-          } ${
-            disabled && "opacity-75 cursor-not-allowed"
-          } bg-lightGreen w-full flex items-center py-[10px] px-4 rounded-[30px] border gap-2`}
+          className={`${inputContainerStyle}
+          ${errors && touched ? "border-red-400" : "border-lightGreen"}
+            ${disabled && "opacity-75 cursor-not-allowed"}
+            bg-lightGreen w-full flex items-center py-[10px] px-4 rounded-[30px] border gap-2`}
         >
           <Field
             autoComplete={autoComplete}
             disabled={disabled}
             onChange={onChangeHandle}
             value={value}
+            id={name}
             name={name}
             type={type === "password" ? (showPass ? "text" : "password") : type}
             className={`${inputStyle} w-full text-primary-color2 bg-transparent outline-none border-none
@@ -83,17 +86,6 @@ export const InputContainer = ({
               <LuSearch size={20} color="#D2ECDF" />
             </button>
           )}
-          {/* delete date from sub dates */}
-          {type === "date" && HandleDeleteIcon && (
-            <button
-              type="button"
-              className="btn btn-ghost btn-xs"
-              title="delete date"
-              onClick={HandleDeleteIcon}
-            >
-              <RiDeleteBinLine size={20} />
-            </button>
-          )}
         </div>
       )}
       {type === "phone" && (
@@ -119,7 +111,12 @@ export const InputContainer = ({
       )}
       {type === "select" && <SelectInput name={name} chooses={chooses} />}
       {type === "radio" && (
-        <RadioInput name={name} setFieldValue={setFieldValue} lang={lang} />
+        <RadioInput
+          name={name}
+          setFieldValue={setFieldValue}
+          lang={lang}
+          setDateErr={setDateErr}
+        />
       )}
       {errors && touched && (
         <div className="w-full flex items-center justify-start text-red-400 rounded-xl text-sm gap-1 px-1">
@@ -135,7 +132,7 @@ const SelectInput = ({ name, chooses }) => (
   <div
     className={`border border-primary-color2 rounded-lg 
       w-full flex items-center py-[10px] px-2 gap-2
-      sm:!text-sm md:!text-md`}
+      sm:text-sm md:text-md`}
   >
     <Field
       as="select"
@@ -152,19 +149,19 @@ const SelectInput = ({ name, chooses }) => (
   </div>
 );
 
-const RadioInput = ({ name, setFieldValue, lang }) => {
+const RadioInput = ({ name, setFieldValue, lang, setDateErr }) => {
   return (
     <div
-      id="my-radio-group"
-      className="flex gap-8 justify-start items-center px-1 w-full"
+      id="radio-group"
+      className="flex gap-5 justify-start items-center px-1 w-full"
     >
       <div
         role="group"
-        aria-labelledby="my-radio-group"
-        className="form-control self-start  "
+        aria-labelledby="radio-group"
+        className="form-control self-start "
       >
-        <label className="label cursor-pointer flex gap-3">
-          <span className="label-text sm:!text-sm md:!text-md">
+        <label className="label cursor-pointer flex gap-2">
+          <span className="label-text text-sm font-medium ">
             {lang === "en" ? "Done" : "مكتمل"}
           </span>
           <Field
@@ -174,19 +171,21 @@ const RadioInput = ({ name, setFieldValue, lang }) => {
             className="radio checked:bg-primary-color1 radio-sm"
             onChange={() => {
               setFieldValue(name, "done");
+              setDateErr(false);
             }}
           />
         </label>
       </div>
       <div className="form-control self-start">
         <label className="label cursor-pointer flex gap-3 ">
-          <span className="label-text sm:!text-sm md:!text-md">
+          <span className="label-text text-sm font-medium ">
             {lang === "en" ? "In progress" : "قيد الانشاء"}
           </span>
           <Field
             onChange={() => {
               setFieldValue("subDate", [""]);
               setFieldValue(name, "in-progress");
+              setDateErr(false);
             }}
             type="radio"
             name={name}

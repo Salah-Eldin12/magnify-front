@@ -23,10 +23,10 @@ export const InputSearch = ({
     <div
       id="input-search-container"
       dir={langDir}
-      className={`flex items-center justify-end w-full !${containerStyle}\
+      className={`flex items-center justify-end w-full ${containerStyle}
       sm:col-span-1
-     lg:col-span-1
-     xl:col-span-5 `}
+      lg:col-span-1
+      xl:col-span-3 `}
     >
       <div
         className={`rounded-full duration-300 
@@ -47,25 +47,25 @@ export const InputSearch = ({
               setSearchDisabled(!searchDisabled);
             }}
             style={{ order: order && order }}
-            className="p-3 rounded-full duration-300 bg-primary-color3 text-lightGreen hover:bg-primary-color3/50 hover:text-primary-color3
-            sm:text-md md:text-md lg:text-lg 
-          disabled:bg-primary-color3/80 disabled:text-lightGreen"
+            className="p-4 rounded-full duration-300 bg-primary-color3 text-lightGreen
+            hover:bg-primary-color3/50 hover:text-primary-color3
+            disabled:bg-primary-color3/80 disabled:text-lightGreen"
           >
-            <BsSearch />
+            <BsSearch size={16} />
           </button>
         )}
         <label
           id="search"
           className={`${
             !searchDisabled
-              ? "visible w-full py-2 h-fit opacity-100 flex mx-2"
+              ? "visible w-full py-3 h-fit opacity-100 flex mx-2"
               : "w-0 m-0 p-0 opacity-0 invisible "
           } relative flex duration-300 ease-in-out h-full items-center justify-between `}
         >
           {!toggle && (
             <CiSearch
               className="text-primary-color2
-          sm:text-lg md:text-xl lg:text-xl"
+          sm:text-lg md:text-xl "
             />
           )}
           <input
@@ -75,7 +75,7 @@ export const InputSearch = ({
             placeholder={placeholder}
             onChange={onChangeHandle}
             className="mx-2 outline-none col-span-11 text-textColor placeholder:text-textColor w-full
-        lg:text-base
+
         md:text-md
         sm:text-sm "
           />

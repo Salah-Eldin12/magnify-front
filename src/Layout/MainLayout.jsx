@@ -4,6 +4,7 @@ import { PopUp } from "../components/PopUp";
 import icon3 from "/assets/icon3.svg";
 import { useLang } from "../context/LangContext";
 import { Footer } from "../components/Footer";
+import { OperDoorIcon } from "../icons/OperDoorIcon";
 
 function MainLayout({ children, type, pageTitle }) {
   const [popUp, setPopUp] = useState(false);
@@ -17,27 +18,30 @@ function MainLayout({ children, type, pageTitle }) {
     <section
       dir={langDir}
       id={type}
-      className={`w-full  relative bg-white grid  gap-3 content-between place-items-center
+      className={`w-full relative bg-white grid  gap-3 content-between place-items-center
     min-h-fit h-full overflow-hidden bg-no-repeat
     bg-cover bg-center overflow-y-auto
-      ${lang === "en" ? "font-['Montserrat'] " : "font-['Cairo']"} `}
+    ${lang === "en" ? "font-montserrat" : "font-cairo"} `}
     >
       <title>{pageTitle}</title>
 
       {popUp && (
         <PopUp
           setPopUp={setPopUp}
-          iconImage={icon3}
-          text={getText(
-            "Are you sure you want to log out?",
-            "هل أنت متأكد أنك تريد تسجيل الخروج"
-          )}
+          iconImage={<OperDoorIcon className="w-[160px]" />}
           type="yes-no"
           noAction={() => setPopUp(!popUp)}
           yesAction={() => {
             window.location.replace("/logout");
           }}
-        />
+        >
+          <p className="font-medium text-base">
+            {getText(
+              "Are you sure you want to log out?",
+              "هل أنت متأكد أنك تريد تسجيل الخروج"
+            )}
+          </p>
+        </PopUp>
       )}
 
       <>

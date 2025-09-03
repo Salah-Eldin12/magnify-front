@@ -7,6 +7,8 @@ import MainLayout from "../../Layout/MainLayout";
 import * as Yup from "yup";
 import { Formik, Form } from "formik";
 import { InputContainer } from "../../components/InputContainer";
+import { MagLogoIcon } from "../../icons/MagLogoIcon";
+import { BgIcon } from "../../icons/BgIcon";
 
 const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
 
@@ -25,6 +27,7 @@ const Login = () => {
       logoStyle="hidden"
       pageTitle={getText("Login", "تسجيل الدخول")}
     >
+      <BgIcon className="absolute z-0 top-0 left-0 w-full h-dvh " />
       <FormContainer lang={lang} QREmail={email} />
     </MainLayout>
   );
@@ -71,9 +74,9 @@ const FormContainer = ({ lang, QREmail }) => {
 
   return (
     <section
-      className=" bg-darkGreen flex flex-col rounded-3xl 
+      className=" bg-darkGreen flex flex-col rounded-3xl relative z-10
       md:w-[400px] md:px-8
-      sm:w-full sm:max-w-[85%] sm:py-10 sm:px-4"
+      sm:w-full sm:max-w-[85%] sm:py-12 sm:px-4"
     >
       <Formik
         initialValues={{
@@ -93,26 +96,19 @@ const FormContainer = ({ lang, QREmail }) => {
         {({ errors, touched, values, handleChange }) => {
           return (
             <Form
-              className="w-full h-full flex flex-col justify-between items-center gap-5
+              className="w-full h-full flex flex-col justify-between items-center gap-5 
             sm:gap-8 lg:gap-5"
             >
               {/* Top form group */}
-              <div className="w-full flex flex-col gap-3 items-center">
-                <img
-                  src={serverImagesPath + "logo/mainLogo.svg"}
-                  alt="magnify logo"
-                  className="sm:w-[170px] md:w-[250px] lg:w-[250px]"
-                />
-                <h2
-                  className="capitalize w-full font-light text-lightGreen text-center
-xl:text-2xl lg:text-xl md:text-2xl sm:text-xl"
-                >
+              <div className="w-full flex flex-col gap-8 items-center">
+                <MagLogoIcon className="sm:w-[170px] md:w-[250px] lg:w-[200px]" />
+                <h2 className="capitalize w-full font-light text-lightGreen text-center text-xl">
                   {getText("Log in", "تسجيل الدخول")}
                 </h2>
                 {error && (
                   <span
                     className={`text-center text-white flex items-center gap-3 justify-center w-full bg-red-500 px-3 py-2 rounded-lg
-sm:text-sm`}
+                    sm:text-sm`}
                   >
                     {error}
                   </span>

@@ -17,7 +17,9 @@ export default {
         "5xl": "60px",
       },
       fontFamily: {
-        serif: ["Montserrat", "PNU"],
+        montserrat: ["Montserrat", "sans-serif"],
+        cairo: ["Cairo", "sans-serif"],
+        pnu: ["PNU", "sans-serif"],
       },
       colors: {
         primary: {

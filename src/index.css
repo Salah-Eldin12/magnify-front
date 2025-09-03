@@ -2,7 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-/* إذا كنت تريد تخصيص daisyUI، افعل ذلك من tailwind.config.js فقط */
+
+@font-face {
+  font-family: "PNU";
+  src: url("./fonts/PNU-Regular.ttf") format("truetype");
+  font-display: swap;
+}
+
 
 
 * {

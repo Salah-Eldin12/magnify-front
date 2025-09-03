@@ -17,28 +17,37 @@ export const RenderPilotProjects = ({ search, Projects, refetch }) => {
     }
   });
   return (
-    <div id="projects" className="grid gap-4  ">
+    <>
       {search.length >= 1 && filteredProjects?.length < 1 ? (
         <div
-          className="flex w-full flex-col items-center justify-center py-2 overflow-y-auto
-                sm:text-sm md:text-md lg:text-base "
+          id="piltoProjects"
+          className="flex w-full flex-col items-center justify-center gap-5 text-primary-color3
+            self-center rounded-box shadow-md overflow-y-auto
+            sm:w-full md:w-6/12 lg:w-8/12"
         >
           <span>
             {getText("No results for", "لا توجد نتائج باسم")} {search}
           </span>
         </div>
       ) : (
-        filteredProjects?.map((project, i) => (
-          <RenderPilotProject
-            deleteLoading={deleteLoading}
-            project={project}
-            key={i}
-            refetch={refetch}
-            setDeleteLoading={setDeleteLoading}
-            Projects={Projects}
-          />
-        ))
+        <ul
+          id="piltoProjects"
+          className="list sm:w-full md:w-6/12 lg:w-8/12 flex flex-col self-center gap-3 rounded-box shadow-md
+          overflow-y-auto max-h-full"
+        >
+          {filteredProjects?.map((project, i) => (
+            <RenderPilotProject
+              deleteLoading={deleteLoading}
+              project={project}
+              key={i}
+              i={i}
+              refetch={refetch}
+              setDeleteLoading={setDeleteLoading}
+              Projects={Projects}
+            />
+          ))}
+        </ul>
       )}
-    </div>
+    </>
   );
 };

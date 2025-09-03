@@ -11,9 +11,7 @@ export const NotFoundInList = ({ textStyle, text, color, icon }) => {
           className="lg:text-8xl md:text-5xl sm:text-4xl"
         />
       )}
-      <p
-        className={`${textStyle} capitalize lg:text-xl md:text-lg sm:text-base`}
-      >
+      <p className={`${textStyle} capitalize md:text-lg sm:text-base`}>
         {text}
       </p>
     </div>

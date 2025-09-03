@@ -1,17 +1,4 @@
-:root {
-  --image-1: url(https://www.magnifyportal.com/api/public/assets/background1.svg);
-  --image-1-res: url(https://www.magnifyportal.com/api/public/assets/background1-res.svg);
-  --image-2: url(https://www.magnifyportal.com/api/public/assets/background2.svg);
-  --image-2-res: url(https://www.magnifyportal.com/api/public/assets/background2-res.svg);
-  --image-3: url(https://www.magnifyportal.com/api/public/assets/background3.svg);
-  --image-3-res: url(https://www.magnifyportal.com/api/public/assets/background3-res.svg);
-  --image-4: url(https://www.magnifyportal.com/api/public/assets/background4.svg);
-  --image-4-res: url(https://www.magnifyportal.com/api/public/assets/background4-res.svg);
-  --image-5: url(https://www.magnifyportal.com/api/public/assets/background5.svg);
-  --image-5-res: url(https://www.magnifyportal.com/api/public/assets/background5-res.svg);
-  --image-6: url(https://www.magnifyportal.com/api/public/assets/background6.svg);
 
-}
 
 .react-tel-input .selected-flag::before {
   left: 5px !important;
@@ -118,15 +105,19 @@ a:focus-visible,
   max-height: 200px !important;
 }
 
-
 #content {
   height: max-content;
   min-height: calc(100dvh - 150px);
 }
 
 #table {
-  height: calc(100dvh - 290px)
+  height: calc(100dvh - 260px)
 }
+
+#piltoProjects {
+  height: calc(100dvh - 260px)
+}
+
 
 #user-projects-grid {
   min-height: calc(100dvh - 250px)
@@ -136,79 +127,12 @@ a:focus-visible,
   max-width: 2000px;
 }
 
-#not-found,
-#login,
-#logout {
-  background-image: var(--image-1);
-}
-
-#create-password,
-#upload-files {
-  background-image: var(--image-5);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: right bottom;
-}
-
-#verify-email,
-#phone-login {
-  background-image: var(--image-3);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: right bottom;
-}
-
-#reset-password,
-#forgot-password,
-#verify-otp {
-  background-image: var(--image-2);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: left bottom;
-
-}
-
-#check-email {
-  background-image: var(--image-4);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: right bottom;
-}
-
-#user-projects {
-  background-image: var(--image-6);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: top;
-}
-
-
-@media (max-width: 996px) {
-  #upload-files {
-    background-image: var(--image-5-res);
-    background-size: 55%;
+@media (max-width:769px) {
+  #table {
+    height: calc(100dvh - 300px)
   }
 
-  #check-email {
-    background-image: var(--image-2-res);
-    background-size: 55%;
-  }
-
-  #verify-email,
-  #phone-login {
-    background-image: var(--image-3-res);
-    background-size: 55%;
-  }
-
-  #reset-password,
-  #forgot-password,
-  #verify-otp {
-    background-image: var(--image-4-res);
-    background-size: 55%;
-  }
-
-  #create-password {
-    background-image: var(--image-1-res);
-    background-size: 55%;
+  #piltoProjects {
+    height: calc(100dvh - 350px)
   }
 }

@@ -13,6 +13,7 @@ import { HandleSendReset } from "../../lib/Verify&ResetReq";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { InputContainer } from "../../components/InputContainer";
+import { Group1 } from "../../components/pagesIcons";
 
 export default function SendReset() {
   const [sending, setSending] = useState(false);
@@ -40,6 +41,7 @@ export default function SendReset() {
       type={"forgot-password"}
       pageTitle={getText("Reset password", "اعادة تعين كلمة المرور")}
     >
+      <Group1 />
       <Formik
         initialValues={{ email: "" }}
         validationSchema={ResetPassSchema}
@@ -49,10 +51,10 @@ export default function SendReset() {
       >
         {({ errors, touched, values, handleChange }) => (
           <Form
-            className="flex h-full flex-col items-center justify-center container max-w-full
-  lg:w-6/12
-  md:w-4/6 md:gap-14 
-  sm:w-11/12 sm:gap-10"
+            className="flex h-full flex-col items-center justify-center container max-w-full relative
+            lg:w-6/12
+            md:w-4/6 md:gap-14 
+            sm:w-11/12 sm:gap-10"
           >
             {/* top text form */}
             <div
@@ -63,8 +65,7 @@ export default function SendReset() {
                 className="text-primary-color1 font-bold capitalize text-center truncate
           xl:text-3xl
           lg:text-2xl
-          md:text-xl
-          sm:text-lg"
+          sm:text-xl"
               >
                 {getText("Forgot your password?", "نسيت كلمة السر ؟")}
               </h2>
@@ -125,6 +126,7 @@ export default function SendReset() {
                   disabled={!values.email || sending}
                   type={"submit"}
                   text={getText("Send verification link", "إرسال رابط التحقق")}
+                  style="!border-none "
                 />
                 <button
                   type="button"

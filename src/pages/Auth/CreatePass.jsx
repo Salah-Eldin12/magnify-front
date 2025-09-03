@@ -13,9 +13,10 @@ import MainLayout from "../../Layout/MainLayout";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { InputContainer } from "../../components/InputContainer";
+import { Group4 } from "../../components/pagesIcons";
+import { Shape12 } from "../../icons/iconShapes/Shape12";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
-const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
 
 export default function CreatePass() {
   const { id } = useParams();
@@ -61,8 +62,9 @@ export default function CreatePass() {
       type="create-password"
       pageTitle={getText("Create New Password", "تعيين كلمة مرور جديدة")}
     >
+      <Group4 />
       <section
-        className="flex items-center flex-col justify-around container max-w-full sm:w-full h-full max-h-[600px] sm:gap-16 lg:gap-16"
+        className="flex items-center flex-col justify-around container max-w-full sm:w-full h-full max-h-[600px] sm:gap-10 lg:gap-16"
         id="create-new-password"
       >
         {popUp && (
@@ -75,7 +77,7 @@ export default function CreatePass() {
               "Go to login page",
               "الذهاب الى صفحة تسجيل الدخول"
             )}
-            iconImage={serverImagesPath + "/icon2.svg"}
+            iconImage={<Shape12 className="sm:w-[120px] md:w-[150px]" />}
             action={() => {
               window.location.replace("/login?email=" + user.email);
               window.localStorage.setItem("auth", "pass-reset");
@@ -184,7 +186,7 @@ const FormContainer = ({
               />
               <SecondaryBtn
                 type="submit"
-                style="sm:min-w-full sm:!py-2 md:hidden"
+                style="sm:min-w-full md:hidden !border-none"
                 text={getText("Set new password", "انشاء كلمة مرور جديدة")}
                 loading={loading}
                 id="focus-btn-2"

@@ -6,6 +6,8 @@ import { MdDeleteForever } from "react-icons/md";
 import { IoIosCopy } from "react-icons/io";
 import { PopUp } from "../../../components/PopUp";
 import { DeletePilotProject } from "../../../lib/DashboardReq";
+import { DeleteIcon } from "../../../icons/DeleteIcon";
+import { IoCheckmarkCircle } from "react-icons/io5";
 
 export const RenderPilotProject = ({
   project,
@@ -13,6 +15,7 @@ export const RenderPilotProject = ({
   deleteLoading,
   setDeleteLoading,
   Projects,
+  i,
 }) => {
   const pilot_project_Folder_path =
     import.meta.env.VITE_APP_WEB_BASE + "pilot-project/" + project;
@@ -24,6 +27,7 @@ export const RenderPilotProject = ({
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
   };
+
   // copy project msg
   useEffect(() => {
     setTimeout(() => {
@@ -43,7 +47,7 @@ export const RenderPilotProject = ({
       {deletePopUp && (
         <PopUp
           loadingBtn={deleteLoading}
-          iconImage="/assets/icon5.svg"
+          iconImage={<DeleteIcon width={120} />}
           type="yes-no"
           noAction={() => setDeletePopUp(!deletePopUp)}
           yesAction={() =>
@@ -57,7 +61,7 @@ export const RenderPilotProject = ({
             })
           }
         >
-          <div className="w-full text-center rounded-xl gap-4 flex flex-col relative">
+          <div className="w-full text-center rounded-xl gap-4 flex flex-col relative text-md">
             <p>
               {getText(
                 "Are you sure you want to delete",
@@ -65,7 +69,7 @@ export const RenderPilotProject = ({
               )}
               <b className="mx-1">{project}</b>
             </p>
-            <p className="text-base">
+            <p className="text-md font-medium">
               {getText(
                 "This action can’t be undone",
                 "لا يمكن التراجع عن هذا الإجراء"
@@ -74,44 +78,37 @@ export const RenderPilotProject = ({
           </div>
         </PopUp>
       )}
-      <li
-        className="border border-primary-color3 rounded-xl flex flex-row items-center justify-between group py-2 h-full
-        sm:px-3
-        md:px-5
-        hover:bg-primary-color3 duration-200 "
-      >
-        <p
-          className="w-4/12 py-0 !bg-transparent !text-primary-color2  group-hover:!text-white
-        sm:text-sm md:text-md lg:text-base"
-        >
-          {project}
-        </p>
-        <div
-          id="actions"
-          className="flex items-center justify-end w-8/12 gap-3 px-4 py-0 !border-none !outline-none !bg-transparent !cursor-default  h-full
-          !text-primary-color1 group-hover:!text-white"
-        >
-          {msg && <span>{msg}</span>}
-          <span className=" h-5/6 w-[2px] bg-primary-color1/60 relative group-hover:bg-white" />
-          <Link to={`${pilot_project_Folder_path}`}>
+      <li className="list-row p-3 flex items-center justify-between border-b not ">
+        <div className="text-3xl font-extralight opacity-30 tabular-nums text-primary-color2 ">
+          0{parseInt(i + 1)}
+        </div>
+        <div>
+          <p className="text-md capitalize text-primary-color2">{project}</p>
+        </div>
+        <div id="btns" className="flex items-center gap-4">
+          <Link
+            to={`${pilot_project_Folder_path}`}
+            className="btn btn-square rounded-xl gap-1 justify-center items-center text-primary-color3"
+          >
             <FaRegEye size={18} title="View project" />
           </Link>
-          <span className=" h-5/6 w-[1px] bg-primary-color1/60 group-hover:bg-white" />
-          <IoIosCopy
+          <button
             onClick={() => {
-              HandleCopyLink(project);
+              !msg && HandleCopyLink(project);
             }}
-            size={18}
             title="Copy project link"
-            className="cursor-pointer"
-          />
-          <span className=" h-5/6 w-[1px] bg-primary-color1/60 group-hover:bg-white" />
-          <MdDeleteForever
-            size={21}
+            className="btn btn-square rounded-xl gap-1 justify-center items-center text-primary-color3
+          "
+          >
+            {msg ? <IoCheckmarkCircle size={20} /> : <IoIosCopy size={18} />}
+          </button>
+          <button
             title="Delete project"
-            className="cursor-pointer"
             onClick={() => setDeletePopUp(!deletePopUp)}
-          />
+            className="btn btn-square rounded-xl gap-1 justify-center items-center text-primary-color3"
+          >
+            <MdDeleteForever size={22} />
+          </button>
         </div>
       </li>
     </>

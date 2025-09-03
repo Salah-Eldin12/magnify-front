@@ -7,13 +7,14 @@ import { PopUp } from "../PopUp";
 import { HandleDelete } from "../../lib/DashboardReq";
 import { useUser } from "../../context/UserContext";
 import { useLang } from "../../context/LangContext";
-import { RenderUsers } from "./Upload Project Folder/RenderUsers";
+import { RenderUsers } from "./ProjectInfo/RenderUsers";
 import { SlArrowLeft, SlArrowRight } from "react-icons/sl";
 import { useQuery } from "react-query";
 import axios from "axios";
 import cookie from "react-cookies";
-import UserTableSkeleton from "../Skeletons/UserTableSkeleton";
+import UserTableSkeleton from "../Skeletons/UserTableLoading";
 import { FaUserSlash } from "react-icons/fa6";
+import { DeleteIcon } from "../../icons/DeleteIcon";
 
 // Constants
 const serverPath = import.meta.env.VITE_APP_API_BASE;
@@ -24,7 +25,6 @@ const UsersTable = ({ search, setSearch }) => {
   const [page, setPage] = useState(1);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deletePopUp, setDeletePopUp] = useState({ active: false, user: "" });
-  const { user } = useUser();
   const { lang } = useLang();
   const getText = (enText, arText) => {
     return lang === "en" || !lang ? enText : arText;
@@ -90,21 +90,26 @@ const UsersTable = ({ search, setSearch }) => {
     {
       text: getText("Name", "الاسم"),
       sort: () => handleSort("name"),
-      icon: <BsSortAlphaDown size={20} className="text-seconder-color2" />,
+      icon: <BsSortAlphaDown size={18} className="text-seconder-color2" />,
+      width: "min-w-[150px] md:w-1/5", // اسم، ياخد عرض أكبر في الموبايل
     },
     {
       text: getText("Email", "البريد الالكتروني"),
+      width: "min-w-[200px]", // عشان الإيميل طويل
     },
     {
       text: getText("Phone No", "رقم الهاتف"),
+      width: "min-w-[140px] md:w-1/5",
     },
     {
       text: getText("Owned projects", "مشاريعك"),
       sort: () => handleSort("number"),
-      icon: <BiSortAlt2 size={20} className="text-seconder-color2" />,
+      icon: <BiSortAlt2 size={18} className="text-seconder-color2" />,
+      width: "min-w-[120px] md:w-1/5",
     },
     {
       text: "",
+      width: "min-w-[100px] md:w-[150px]",
     },
   ];
 
@@ -112,12 +117,12 @@ const UsersTable = ({ search, setSearch }) => {
     <>
       <div
         id="table"
-        className="w-full max-w-full flex items-start flex-col justify-start overflow-auto"
+        className="w-full max-w-full flex items-start flex-col justify-between overflow-auto"
       >
         {/* delete user popUp */}
         {deletePopUp.active && (
           <PopUp
-            iconImage="/assets/icon5.svg"
+            iconImage={<DeleteIcon className="w-[120px]" />}
             type="yes-no"
             noAction={() => setDeletePopUp(!deletePopUp)}
             loadingBtn={deleteLoading}
@@ -131,16 +136,17 @@ const UsersTable = ({ search, setSearch }) => {
               })
             }
           >
-            <div className="w-full text-center lowercase rounded-xl gap-4 flex flex-col relative">
+            <div className="w-full text-md text-center lowercase rounded-xl gap-4 flex flex-col relative">
               <p>
-                <b>{user?.fname} </b>
                 {getText(
                   "Are you sure you want to delete",
                   "هل أنت متأكد أنك تريد الحذف ؟"
                 )}
-                <b className="mx-1">{deletePopUp.user?.fname}</b>
+                <b className="mx-1">
+                  {deletePopUp.user?.fname + " " + deletePopUp.user?.lname}
+                </b>
               </p>
-              <p className="text-base">
+              <p className="text-md font-semibold">
                 {getText(
                   "This action can’t be undone",
                   "لا يمكن التراجع عن هذا الإجراء"
@@ -149,57 +155,70 @@ const UsersTable = ({ search, setSearch }) => {
             </div>
           </PopUp>
         )}
-        <table className="table w-full rounded-full border-separate border-spacing-y-2 sm:table-sm md:table-md table-zebra">
-          <thead className="rounded-full border-accent ">
-            <tr className="w-full border-accent overflow-hidden rounded-full text-lightGreen sticky top-0">
-              {tableHead.map((list, i) => (
-                <th
-                  key={i}
-                  className="font-normal sm:text-sm md:text-md  bg-primary-color3"
-                >
-                  <div className="flex items-center justify-center gap-3">
-                    <span className="w-full truncate">{list.text}</span>
-                    {list.sort && (
-                      <button onClick={list.sort}>{list.icon}</button>
-                    )}
-                  </div>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          {!error && !isLoading && !isRefetching && (
-            <RenderUsers
-              setDeletePopUp={setDeletePopUp}
-              search={search}
-              sort={sort}
-              usersSearch={response?.usersSearch}
-              users={response?.users}
-              isLoading={isLoading}
-              isRefetching={isRefetching}
-              RenderUser={RenderUser}
-            />
-          )}
-        </table>
+        {!error &&
+          !isLoading &&
+          !isRefetching &&
+          (search?.length < 1 || RenderUser?.length > 0 ? (
+            <table className="table-auto w-full border-separate border-spacing-y-3 min-w-[600px] sm:table-sm md:table-md">
+              <thead className="border-accent">
+                <tr className="w-full border-accent overflow-hidden text-lightGreen sticky top-0  ">
+                  {tableHead.map((list, i) => (
+                    <th
+                      key={i}
+                      className={`font-normal sm:text-sm md:text-md bg-primary-color3 !py-4 
+                  ${list.width} 
+                  ${lang === "en" && i === 0 && "rounded-tl-xl"}
+                  ${lang === "en" && i === tableHead.length - 1 && "rounded-tr-xl"} 
+                  ${lang === "ar" && i === 0 && "rounded-tr-xl"}
+                  ${lang === "ar" && i === tableHead.length - 1 && "rounded-tl-xl"}
+                  `}
+                    >
+                      <div className="flex items-center justify-start gap-3">
+                        <span className="w-full text-start truncate text-sm font-semibold">
+                          {list.text}
+                        </span>
+                        {list.sort && (
+                          <button onClick={list.sort}>{list.icon}</button>
+                        )}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <RenderUsers
+                setDeletePopUp={setDeletePopUp}
+                search={search}
+                sort={sort}
+                usersSearch={response?.usersSearch}
+                users={response?.users}
+                isLoading={isLoading}
+                isRefetching={isRefetching}
+                RenderUser={RenderUser}
+              />
+            </table>
+          ) : (
+            <div
+              id="table"
+              className="flex gap-5 border justify-center items-center w-full rounded-xl border-primary-color3 capitalize
+      text-primary-color3"
+            >
+              <span>
+                {getText("No results for", "لا توجد نتائج باسم")} {search}
+              </span>
+            </div>
+          ))}
         {error && <ErrorTableData getText={getText} />}
-        {search?.length >= 1 && !error && RenderUser?.length === 0 && (
-          <div
-            className="flex w-full flex-col items-center justify-center py-2
-                            sm:text-sm md:text-md lg:text-base"
-          >
-            <span>
-              {getText("No results for", "لا توجد نتائج باسم")} {search}
-            </span>
-          </div>
-        )}
       </div>
       {/* pagination */}
-      <Pagination
-        page={page}
-        setPage={setPage}
-        search={search}
-        nextPage={response?.next}
-        prevPage={response?.prev}
-      />
+      {(search?.length < 1 || RenderUser?.length > 0) && (
+        <Pagination
+          page={page}
+          setPage={setPage}
+          search={search}
+          nextPage={response?.next}
+          prevPage={response?.prev}
+        />
+      )}
     </>
   );
 };
@@ -215,10 +234,12 @@ const Pagination = ({ page, setPage, search, nextPage, prevPage }) => (
       }}
       className="join-item text-primary-color2 disabled:text-primary-color2/50"
     >
-      <SlArrowLeft size={15} />
+      <SlArrowLeft size={12} />
     </button>
 
-    <button className="join-item text-primary-color2 text-lg">{page}</button>
+    <button className="join-item text-primary-color2 font-medium">
+      {page}
+    </button>
 
     <button
       disabled={!nextPage || search}
@@ -227,7 +248,7 @@ const Pagination = ({ page, setPage, search, nextPage, prevPage }) => (
       }}
       className="join-item text-primary-color2 disabled:text-primary-color2/50"
     >
-      <SlArrowRight size={15} />
+      <SlArrowRight size={12} />
     </button>
   </div>
 );
@@ -235,11 +256,14 @@ const Pagination = ({ page, setPage, search, nextPage, prevPage }) => (
 // loading table data ui
 const ErrorTableData = ({ getText }) => {
   return (
-    <div className="h-full w-full flex flex-col gap-2 text-primary-color3 justify-center items-center">
+    <div
+      className="h-full w-full flex flex-col gap-5 text-primary-color3 justify-center items-center 
+      border border-dashed rounded-xl border-primary-color2"
+    >
       <FaUserSlash className="lg:text-8xl" />
-      <span className="text-xl font-semibold">
+      <span className="text-lg font-semibold">
         {getText(
-          "No users found yet, create some",
+          "No user found yet, create some",
           "لا يوجد مستخدمين حتى الآن، قم بإنشاء مستخدمين"
         )}
       </span>

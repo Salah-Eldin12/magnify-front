@@ -21,7 +21,6 @@ import SendVerifyEmail from "./pages/Auth/sendVerifyEmail";
 import Login from "./pages/Auth/Login";
 import { NotFoundDashboard } from "./pages/Dashboard/NotFoundDashboard";
 import { PilotProjects } from "./pages/Dashboard/Pilot Projects/PilotProjects";
-import UploadProjectFiles from "./pages/Dashboard/UploadProjectFiles";
 import { PilotProjectView } from "./pages/Dashboard/Pilot Projects/PilotProjectView";
 
 function App() {
@@ -47,7 +46,6 @@ function App() {
           <Route index element={<PilotProjects />} />
         </Route>
         <Route path=":clientID" element={<UserData />} />
-        <Route path="project-upload-files" element={<UploadProjectFiles />} />
         <Route path=":clientID/project/:projectID" element={<EditProject />} />
         <Route path="not-found" element={<NotFoundDashboard />} />
       </Route>

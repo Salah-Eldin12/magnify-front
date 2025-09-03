@@ -2,7 +2,7 @@ import UserInfo from "../../components/Dashboard/UserInfo";
 import MainLayout from "../../Layout/MainLayout";
 import ProjectInfo from "../../components/Dashboard/Projects";
 import { useLang } from "../../context/LangContext";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import cookie from "react-cookies";
 import { useQuery } from "react-query";
 import axios from "axios";
@@ -45,6 +45,17 @@ export function UserData() {
     }
   );
 
+  if (!user?.isAdmin) {
+    return (
+      <Navigate
+        to={"/unauthorized"}
+        state={{
+          err: "unauthorized",
+        }}
+      />
+    );
+  }
+
   if (clientID) {
     if (isLoading) {
       return (
@@ -75,17 +86,7 @@ export function UserData() {
       );
     }
   }
-
-  if (!user?.isAdmin) {
-    return (
-      <NotFoundDashboard
-        message={getText(
-          "You are not authorized to view this page.",
-          "ليس لديك صلاحية لعرض هذه الصفحة."
-        )}
-      />
-    );
-  } else if (error?.status === 400) {
+  if (error && error?.status === 400) {
     return (
       <NotFoundDashboard
         message={getText(

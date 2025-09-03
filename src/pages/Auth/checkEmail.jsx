@@ -12,6 +12,8 @@ import { SecondaryBtn } from "../../components/Btns";
 import { Line } from "../../components/Line";
 /////// layout
 import MainLayout from "../../Layout/MainLayout";
+import { MailCheckIcon } from "../../icons/MailCheckIcon";
+import { Group3 } from "../../components/pagesIcons";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 
@@ -54,19 +56,16 @@ export default function CheckEmail() {
       type={"check-email"}
       pageTitle={getText("Verify Email", "التحقق من اليريد الالكتروني")}
     >
+      <Group3 />
       <section
-        className="flex flex-col items-center justify-center h-full container max-w-[1000px]
+        className="flex flex-col items-center justify-center h-full container max-w-[1000px] relative
         lg:w-6/12
         md:w-4/6 md:gap-14
         sm:w-11/12 sm:gap-8 "
       >
         {/* text */}
         <div id="text" className="flex flex-col items-center gap-10">
-          <img
-            src="/assets/icon1.svg"
-            alt="check-email-icon"
-            className="sm:w-[100px] md:w-[130px] lg:w-[120px] xl:w-[140px]"
-          />
+          <MailCheckIcon className="sm:w-[130px] md:w-[140px] xl:w-[160px]" />
           <h1
             id="section-heading"
             className="font-semibold text-primary-color1
