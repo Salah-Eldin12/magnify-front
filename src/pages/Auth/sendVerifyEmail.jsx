@@ -12,7 +12,7 @@ import { HandleSendVerify } from "../../lib/Verify&ResetReq";
 import { Loading } from "../../components/Loading";
 import { NotFound } from "../../components/NotFound";
 import { SecondaryBtn } from "../../components/Btns";
-import { Group2 } from "../../components/pagesIcons";
+import { Group2 } from "../../components/PagesIcons";
 import { EmailVerifiedIcon } from "../../icons/EmailVerifiedIcon";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;

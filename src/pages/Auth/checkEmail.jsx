@@ -13,7 +13,7 @@ import { Line } from "../../components/Line";
 /////// layout
 import MainLayout from "../../Layout/MainLayout";
 import { MailCheckIcon } from "../../icons/MailCheckIcon";
-import { Group3 } from "../../components/pagesIcons";
+import { Group3 } from "../../components/PagesIcons";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 

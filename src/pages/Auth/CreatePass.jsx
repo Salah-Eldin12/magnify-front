@@ -13,7 +13,7 @@ import MainLayout from "../../Layout/MainLayout";
 import * as Yup from "yup";
 import { Form, Formik } from "formik";
 import { InputContainer } from "../../components/InputContainer";
-import { Group4 } from "../../components/pagesIcons";
+import { Group4 } from "../../components/PagesIcons";
 import { Shape12 } from "../../icons/iconShapes/Shape12";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;

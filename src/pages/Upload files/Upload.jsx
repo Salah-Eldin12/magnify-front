@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { SecondaryBtn } from "../../components/Btns";
 import MainLayout from "../../Layout/MainLayout";
 import { useLang } from "../../context/LangContext";
-import { Group2 } from "../../components/pagesIcons";
+import { Group2 } from "../../components/PagesIcons";
 import { CameraIcon } from "../../icons/CameraIcon";
 import { GalleryIcon } from "../../icons/GalleryIcon";
 

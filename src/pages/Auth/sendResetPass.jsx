@@ -13,7 +13,7 @@ import { HandleSendReset } from "../../lib/Verify&ResetReq";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { InputContainer } from "../../components/InputContainer";
-import { Group1 } from "../../components/pagesIcons";
+import { Group1 } from "../../components/PagesIcons";
 
 export default function SendReset() {
   const [sending, setSending] = useState(false);

@@ -9,7 +9,7 @@ import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { InputContainer } from "../../../components/InputContainer";
 import { PhoneIcon } from "../../../icons/PhoneIcon";
-import { Group2 } from "../../../components/pagesIcons";
+import { Group2 } from "../../../components/PagesIcons";
 
 export const PhoneLogin = () => {
   const [error, setError] = useState(null);

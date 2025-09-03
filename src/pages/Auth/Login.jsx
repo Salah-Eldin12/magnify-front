@@ -10,8 +10,6 @@ import { InputContainer } from "../../components/InputContainer";
 import { MagLogoIcon } from "../../icons/MagLogoIcon";
 import { BgIcon } from "../../icons/BgIcon";
 
-const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
-
 const Login = () => {
   const { lang } = useLang();
   const [searchParams, setSearchParams] = useSearchParams();

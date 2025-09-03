@@ -12,7 +12,7 @@ import MainLayout from "../../Layout/MainLayout";
 import { PopUp } from "../../components/PopUp";
 import { useUser } from "../../context/UserContext";
 import { FaBuildingCircleXmark } from "react-icons/fa6";
-import { Group5 } from "../../components/pagesIcons";
+import { Group5 } from "../../components/PagesIcons";
 import { CalenderIcon } from "../../icons/CalenderIcon";
 
 export default function UserProjects() {

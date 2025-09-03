@@ -10,7 +10,7 @@ import axios from "axios";
 import { HandleResendOtp, HandleSubmitOtp } from "../../../lib/LoginReq";
 import { MdErrorOutline } from "react-icons/md";
 import { ShieldCheckIcon } from "../../../icons/ShieldCheckIcon";
-import { Group1 } from "../../../components/pagesIcons";
+import { Group1 } from "../../../components/PagesIcons";
 
 const serverPath = import.meta.env.VITE_APP_API_BASE;
 const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
