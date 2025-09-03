@@ -16,7 +16,7 @@ import { useLocation } from "react-router-dom";
 import { InputContainer } from "../../components/InputContainer";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { Group3 } from "../../components/pagesIcons";
+import { Group3 } from "../../components/PagesIcons";
 import { SlCloudUpload } from "react-icons/sl";
 
 export default function UploadPage() {

@@ -1,3 +1,5 @@
+const serverImagesPath = import.meta.env.VITE_APP_IMAGES_FOLDER;
+
 export const Loading = () => {
   return (
     <div className="flex justify-center top-0 fixed z-50 items-center w-full h-full bg-white">
@@ -9,7 +11,10 @@ export const Loading = () => {
         muted
         loop
       >
-        <source src="/assets/logo animation.mp4" type="video/mp4" />
+        <source
+          src={serverImagesPath + "logo animation.mp4"}
+          type="video/mp4"
+        />
       </video>
     </div>
   );

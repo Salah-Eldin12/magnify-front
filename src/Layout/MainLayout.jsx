@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import { PopUp } from "../components/PopUp";
-import icon3 from "/assets/icon3.svg";
 import { useLang } from "../context/LangContext";
 import { Footer } from "../components/Footer";
 import { OperDoorIcon } from "../icons/OperDoorIcon";
