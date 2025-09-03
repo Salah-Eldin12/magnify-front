@@ -22,8 +22,10 @@ export default function ProjectSkeleton() {
         <div className="skeleton h-1 w-full bg-primary-color1"></div>
       </div>
       <SecondaryLink
-        style={`truncate !absolute !bottom !left-[50%] !translate-x-[-50%] 
-        sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16lg:-bottom-14 sm:-bottom-16`}
+        style={`truncate !absolute !bottom !left-[50%] !translate-x-[-50%] !text-sm
+            sm:!left-[50%] sm:!translate-x-[-50%] sm:-bottom-16 
+            lg:-bottom-14 sm:-bottom-16
+            `}
         text={lang === "ar" ? "مشاهدة المشروع" : "view project"}
       />
     </div>
